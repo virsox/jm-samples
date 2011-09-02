@@ -13,6 +13,9 @@ import javax.inject.Named;
 import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.audio.mp3.MP3File;
 import org.jaudiotagger.tag.FieldKey;
+import org.jaudiotagger.tag.Tag;
+import org.jaudiotagger.tag.id3.AbstractID3Tag;
+import org.jaudiotagger.tag.id3.AbstractID3v2Tag;
 import org.jaudiotagger.tag.id3.ID3v1Tag;
 
 import br.com.jm.musiclib.indexer.MusicIndexer;
@@ -86,7 +89,12 @@ public class MusicIndexerImpl implements MusicIndexer {
 		MP3File f;
 		FileFilter filter = new FileFilter() {
 			public boolean accept(File pathname) {
-				return pathname.isDirectory()
+				
+				// adicionei verificação de que não são os diretório "." e
+				// ".." - no Mac estava entrando em loop infinito
+				return ((pathname.isDirectory()) &&
+							(!pathname.getName().equals(".")) &&
+							(!pathname.getName().equals("..")))
 						|| pathname.getName().endsWith(".mp3");
 			}
 		};
@@ -102,26 +110,28 @@ public class MusicIndexerImpl implements MusicIndexer {
 					// TODO Logar o erro
 					continue;
 				}
+				
 				MusicInfo info = new MusicInfo();
-
-				ID3v1Tag id3v1Tag = f.getID3v1Tag();
-
 				info.setFileName(file.getAbsolutePath());
-
-				info.setAlbum(id3v1Tag.getFirst(FieldKey.ALBUM));
-				info.setArtist(id3v1Tag.getFirst(FieldKey.ARTIST));
-				info.setTitle(id3v1Tag.getFirst(FieldKey.TITLE));
+				
+				// Mudei o tipo para o genérico "Tag" - estava capotando com
+				// alguns mp3 que eu tinha cuja versão do id3 não era 1.0
+				Tag tag = f.getTag();
+				
+				info.setAlbum(tag.getFirst(FieldKey.ALBUM));
+				info.setArtist(tag.getFirst(FieldKey.ARTIST));
+				info.setTitle(tag.getFirst(FieldKey.TITLE));
 				try {
-					info.setTrackNumber(id3v1Tag.getFirst(FieldKey.TRACK));
+					info.setTrackNumber(tag.getFirst(FieldKey.TRACK));
 				} catch (UnsupportedOperationException e) {
 					info.setTrackNumber("");
 				}
-				info.addTag(id3v1Tag.getFirst(FieldKey.GENRE));
+				info.addTag(tag.getFirst(FieldKey.GENRE));
 
-				if (id3v1Tag.getFirstArtwork() != null) {
-					info.setCover(id3v1Tag.getFirstArtwork().getBinaryData());
+				if (tag.getFirstArtwork() != null) {
+					info.setCover(tag.getFirstArtwork().getBinaryData());
 				}
-
+					
 				// Disparar o evento
 				events.fire(new MusicIndexerEvent(info));
 
