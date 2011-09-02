@@ -1,11 +1,12 @@
 package br.com.jm.musiclib.model;
 
-import java.io.File;
 import java.util.List;
+
+import br.com.jm.musiclib.indexer.MusicIndexerEvent;
 
 public interface MusicService {
 
-	public abstract void createIndex(File dir);
+	//public abstract void createIndex(File dir);
 
 	public abstract Music getMusic(String musicId);
 	
@@ -16,5 +17,8 @@ public interface MusicService {
 
 	public abstract void addComment(Music music,
 			Comment comentario);
+	
+
+    public void processIndexerEvent(MusicIndexerEvent event);
 
 }

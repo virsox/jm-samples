@@ -12,27 +12,27 @@ import java.util.List;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import br.com.jm.musiclib.model.Comment;
-import br.com.jm.musiclib.model.Music;
-
 import br.com.jm.musiclib.indexer.MusicIndexerEvent;
 import br.com.jm.musiclib.indexer.MusicInfo;
+import br.com.jm.musiclib.model.Comment;
+import br.com.jm.musiclib.model.Music;
 
 
 public class MusicServiceTest {
 
-	private static MongoProviderBean mongo;
+	private static MongoProvider mongo;
 	private static MusicServiceBean service;
 	
 	private static Music music;
 	
 	@BeforeClass
 	public static void setUp() throws UnknownHostException {
-		mongo = new MongoProviderBean();
+		mongo = new MongoProvider();
 		mongo.initDB("musicsDBTest", true);
 				
 		service = new MusicServiceBean();
-		service.setMongoProvider(mongo);
+		service.setDataBase(mongo.getDataBase());
+		service.setMusicCollection(mongo.getMusicCollection());
 	}
 	
 	@Test
@@ -47,7 +47,7 @@ public class MusicServiceTest {
 		info.setFileName("metalico - enter sanman.mp3");
 		
 		MusicIndexerEvent event = new MusicIndexerEvent(info);
-		//music = service.processIndexerEvent(event);
+		service.processIndexerEvent(event);
 	}
 	
 	@Test

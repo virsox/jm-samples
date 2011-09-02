@@ -3,18 +3,19 @@ package br.com.jm.musiclib.model.impl;
 import java.net.UnknownHostException;
 
 import javax.annotation.PostConstruct;
-import javax.ejb.Singleton;
-import javax.ejb.Startup;
+import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.inject.Produces;
+
+import br.com.jm.musiclib.model.cdi.MusicCollection;
+import br.com.jm.musiclib.model.cdi.UserCollection;
 
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.Mongo;
-import com.mongodb.MongoException;
 
 
-@Singleton
-@Startup
-public class MongoProviderBean {
+@ApplicationScoped
+public class MongoProvider {
     
 	private DB db;
 	private DBCollection musicsColl;
@@ -45,15 +46,18 @@ public class MongoProviderBean {
 	}
 	
 
+	@Produces
 	public DB getDataBase() {
 		return db;
 	}	
 	
+	@Produces @MusicCollection
 	public DBCollection getMusicCollection() {
 		return this.musicsColl;
 	}
 	
-	public DBCollection getUsersCollection() {
+	@Produces @UserCollection
+	public DBCollection getUserCollection() {
 		return this.usersColl;
 	}
 

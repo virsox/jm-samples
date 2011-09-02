@@ -8,6 +8,7 @@ import br.com.jm.musiclib.model.Music;
 import br.com.jm.musiclib.model.Playlist;
 import br.com.jm.musiclib.model.User;
 import br.com.jm.musiclib.model.UserService;
+import br.com.jm.musiclib.model.cdi.UserCollection;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBCollection;
@@ -20,20 +21,19 @@ import javax.ejb.Stateless;
 @Local(UserService.class)
 public class UserServiceBean implements UserService {
 	
-	@Inject
-	private MongoProviderBean mongo;
+	@Inject @UserCollection
+	private DBCollection userColl;
 	
-	public void setMongoProvider(MongoProviderBean mongo) {
-		this.mongo = mongo;
+	public void setUserCollection(DBCollection userColl) {
+		this.userColl = userColl;
 	}
 	
 	
 	public String createUser(User user) {
 				
         DBObject doc = user.toDBObject();        
-        DBCollection usersColl = mongo.getUsersCollection();
         
-        WriteResult result = usersColl.insert(doc);
+        WriteResult result = userColl.insert(doc);
         
         // TODO corrigir este tratamento
         if (result.getError() != null) {
@@ -51,13 +51,11 @@ public class UserServiceBean implements UserService {
 	@Override
 	public User login(String login, String password) {
 		
-		DBCollection usersColl = mongo.getUsersCollection();
-		
 		DBObject loginQuery = new BasicDBObject();
 		loginQuery.put("login", login);
 		loginQuery.put("password", password);
 		
-		DBObject result = usersColl.findOne(loginQuery);
+		DBObject result = this.userColl.findOne(loginQuery);
 		if (result != null) {
 			return User.getUser(result);
 		}
@@ -74,8 +72,7 @@ public class UserServiceBean implements UserService {
 		DBObject update = new BasicDBObject("$inc",
 				new BasicDBObject("executions.$.quantity", 1));
 		
-		DBCollection usersColl = mongo.getUsersCollection();
-		usersColl.update(key, update);
+		this.userColl.update(key, update);
 		
 		return user;
 	}
@@ -89,8 +86,8 @@ public class UserServiceBean implements UserService {
 		//user.addPlaylist(playlist);
 		
 		BasicDBObject key = new BasicDBObject("_id", new ObjectId(user.getId()));		
-    	DBCollection usersColl = mongo.getUsersCollection();
-    	usersColl.update(key, user.toDBObject());
+
+    	this.userColl.update(key, user.toDBObject());
 		
 //    	BasicDBObject update = new BasicDBObject("$push",
 //    			new BasicDBObject("playlists", playlist.toDBObject()));
