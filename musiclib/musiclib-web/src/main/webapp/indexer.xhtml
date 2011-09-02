@@ -1,0 +1,26 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+
+<h:head>
+	<title>Music Library</title>
+</h:head>
+
+<h:body>
+	<h:form prependId="false">
+		<p:panel header="Music Library">
+		Olá #{userBean.currentUser.name}! Bem vindo ao indexador de músicas.<br />
+		Aparentemente sua biblioteca ainda não está indexada. Informe abaixo qual é a pasta no servidor onde estão localizadas as suas músicas e clique no botão "Indexar".<br />
+			<br />
+		Pasta: <p:inputText id="folder" value="#{indexerBean.folder}"
+				required="true" size="50" />
+			<p:commandButton action="#{indexerBean.doIndex}" value="Indexar" ajax="false" />
+		</p:panel>
+	</h:form>
+</h:body>
+</html>
