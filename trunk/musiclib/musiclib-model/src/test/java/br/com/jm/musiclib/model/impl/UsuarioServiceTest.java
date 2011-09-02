@@ -11,30 +11,31 @@ import br.com.jm.musiclib.model.User;
 
 public class UsuarioServiceTest {
 	
-	private static MongoProviderBean mongo;	
+	private static MongoProvider mongo;	
 	
 	private static MusicServiceBean musicService;
 	private static UserServiceBean userService;
 	
 	@BeforeClass
 	public static void setUp() throws UnknownHostException {
-		mongo = new MongoProviderBean();
-		mongo.initDB("musicsDB", true);
+		mongo = new MongoProvider();
+		mongo.initDB("musicsDBTest", true);
 	
 		musicService = new MusicServiceBean();
-		musicService.setMongoProvider(mongo);
+		musicService.setDataBase(mongo.getDataBase());
+		musicService.setMusicCollection(mongo.getMusicCollection());
 		
 		userService = new UserServiceBean();
-		userService.setMongoProvider(mongo);
+		userService.setUserCollection(mongo.getUserCollection());
 	}
 	
 	@Test
 	public void testCriaUsuario() {
 		//DateFormat df = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 		
-		Music music1 = new Music(1, "Enter Sandman", "Metallica", "Black Album", "Rock");
-		Music music2 = new Music(2, "Sad But True", "Metallica", "Black Album", "Rock");		
-		Music music3 = new Music(3, "Unforgiven", "Metallica", "Black Album", "Rock");
+		Music music1 = new Music(1, "Enter Sandman", "Metallica", "Black Album", null, "Rock");
+		Music music2 = new Music(2, "Sad But True", "Metallica", "Black Album", null, "Rock");		
+		Music music3 = new Music(3, "Unforgiven", "Metallica", "Black Album", null, "Rock");
 		
 		musicService.createMusic(music1);
 		musicService.createMusic(music2);
