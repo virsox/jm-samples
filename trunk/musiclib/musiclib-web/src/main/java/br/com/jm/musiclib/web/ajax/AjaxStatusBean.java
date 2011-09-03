@@ -38,7 +38,7 @@ public class AjaxStatusBean implements Serializable {
 			if (bean.getCompleted()) {
 				FacesContext context = FacesContext.getCurrentInstance();
 				try {
-					context.getExternalContext().redirect("playlist.jsf");
+					context.getExternalContext().redirect("main.jsf");
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
