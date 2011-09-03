@@ -19,10 +19,15 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 @ConversationScoped
-@Named
+@Named(value="createPlaylist")
 public class CreatePlaylist implements Serializable {
     
-    @EJB
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -521826768044601787L;
+
+	@EJB
     UserService userService;
     
     @EJB
@@ -34,6 +39,7 @@ public class CreatePlaylist implements Serializable {
     @Inject
     Conversation conv;
     
+      
     
     private String name;
     private String searchValue;
@@ -71,9 +77,19 @@ public class CreatePlaylist implements Serializable {
     }
     
     public void addMusic(Music music) {
+    	// Adicionar na lista de selecionados
         this.selectedMusics.add(music);
+        // Remover da lista da busca
+        this.searchResults.remove(music);
     }
     
+    public void removeMusic(Music music) {
+    	// Remover da lista de selecionados
+        this.selectedMusics.remove(music);
+        // Adicionar na lista da busca
+        this.searchResults.add(music);
+    }
+
     public void search() {
         this.searchResults = musicService.searchMusics(this.searchValue);
     }

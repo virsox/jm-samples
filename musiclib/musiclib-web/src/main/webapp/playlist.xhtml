@@ -1,59 +1,94 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!--
-To change this template, choose Tools | Templates
-and open the template in the editor.
--->
-<!DOCTYPE html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:f="http://java.sun.com/jsf/core">
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
 
-    <h:head>
-        <title>Tela Principal</title>
-    </h:head>
-    <h:body>
-        
-        <h:form>
-            
-            <h:outputText value="Artista: " /><h:inputText value="#{createPlaylist.searchValue}" /><br />
-            <h:commandButton action="#{createPlaylist.search}" value="Buscar"/>
+<h:head>
+	<title>Music Library</title>
+</h:head>
 
-            
-            <h:dataTable value="#{createPlaylist.searchResults}" var="music">
-                <h:column>
-                    <f:facet name="header">Nome</f:facet>
-                    <h:outputText value="#{music.title}" />
-                </h:column>
-                <h:column>
-                    <f:facet name="header">Artista</f:facet>
-                    <h:outputText value="#{music.artistName}" />
-                </h:column>
-                <h:column>
-                    <f:facet name="header">Adicionar</f:facet>
-                    <h:commandButton action="#{createPlaylist.addMusic(music)}" value="Add"/>
-                </h:column>
-            </h:dataTable>
+<h:body>
+	<h:form>
+		<p:panel header="Playlist">
+			<h:panelGrid columns="2">
+				<h:outputText value="Nome:" />
+				<h:inputText value="#{createPlaylist.name}" />
+			</h:panelGrid>
 
-            <hr />
+			<p:dataTable var="music" value="#{createPlaylist.selectedMusics}"
+				paginator="true" rows="10"
+				paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+				rowsPerPageTemplate="5,10,15">
 
-            
-            <h:outputText value="Nome da Playlist: " /><h:inputText value="#{createPlaylist.name}" /><br />
-            <h:outputText value="Musicas Adicionadas" />
-            <h:dataTable value="#{createPlaylist.selectedMusics}" var="music">
-                <h:column>
-                    <f:facet name="header">Nome</f:facet>
-                    <h:outputText value="#{music.title}" />
-                </h:column>
-                <h:column>
-                    <f:facet name="header">Artista</f:facet>
-                    <h:outputText value="#{music.artistName}" />
-                </h:column>
-            </h:dataTable>        
-            
-            
-            <h:commandButton action="#{createPlaylist.create}" value="Criar"/>
-            <h:commandButton action="#{createPlaylist.create}" value="Criar"/>
-            
-        </h:form>        
-    </h:body>
+				<p:column>
+					<f:facet name="header">Album</f:facet>
+					<h:outputText value="#{music.albumName}" />
+				</p:column>
+
+				<p:column>
+					<f:facet name="header">Nome</f:facet>
+					<h:outputText value="#{music.title}" />
+				</p:column>
+
+				<p:column>
+					<f:facet name="header">Artista</f:facet>
+					<h:outputText value="#{music.artistName}" />
+				</p:column>
+				<p:column>
+					<f:facet name="header">Remover</f:facet>
+					<h:commandButton action="#{createPlaylist.removeMusic(music)}" image="delete.png"
+						value="Add" />
+				</p:column>
+
+			</p:dataTable>
+			<h:panelGrid columns="2">
+				<h:commandButton action="#{createPlaylist.create}" value="Criar" />
+				<h:commandButton action="#{createPlaylist.cancel}" value="Cancelar" />
+			</h:panelGrid>
+
+		</p:panel>
+
+		<p:panel header="Músicas">
+			<h:panelGrid columns="2">
+				<h:outputText value="Música: " />
+				<h:inputText value="#{createPlaylist.searchValue}" />
+			</h:panelGrid>
+			<h:commandButton action="#{createPlaylist.search}" value="Buscar" />
+
+			<p:dataTable var="music" value="#{createPlaylist.searchResults}"
+				paginator="true" rows="10"
+				paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+				rowsPerPageTemplate="5,10,15">
+
+				<f:facet name="header">Resultado da busca</f:facet>
+				<p:column>
+					<f:facet name="header">Album</f:facet>
+					<h:outputText value="#{music.albumName}" />
+				</p:column>
+				<p:column>
+					<f:facet name="header">Nome</f:facet>
+					<h:outputText value="#{music.title}" />
+				</p:column>
+
+				<p:column>
+					<f:facet name="header">Artista</f:facet>
+					<h:outputText value="#{music.artistName}" />
+				</p:column>
+				<p:column>
+					<f:facet name="header">Adicionar</f:facet>
+					<h:commandButton action="#{createPlaylist.addMusic(music)}" image="add.png"
+						value="Add" />
+				</p:column>
+
+
+
+			</p:dataTable>
+
+		</p:panel>
+	</h:form>
+</h:body>
 </html>
