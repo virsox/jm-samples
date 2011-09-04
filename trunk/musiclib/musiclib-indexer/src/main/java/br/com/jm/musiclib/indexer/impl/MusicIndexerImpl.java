@@ -123,7 +123,7 @@ public class MusicIndexerImpl implements MusicIndexer {
 				info.setTitle(tag.getFirst(FieldKey.TITLE));
 				try {
 					info.setTrackNumber(tag.getFirst(FieldKey.TRACK));
-				} catch (UnsupportedOperationException e) {
+				} catch (Throwable e) {
 					info.setTrackNumber("");
 				}
 				info.addTag(tag.getFirst(FieldKey.GENRE));
