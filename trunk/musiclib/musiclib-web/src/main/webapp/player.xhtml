@@ -1,29 +1,36 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:f="http://java.sun.com/jsf/core">
-    <h:head>
-        <title>Player</title>
-    </h:head>
-    <h:body>
-        <h:form>
-            <h:selectOneMenu value="#{player.selectedPlaylist}"
-                             valueChangeListener="#{player.selectPlaylist}">
-                <f:selectItem itemLabel="-" />
-                <f:selectItems value="#{userBean.currentUser.playlists}"
-                               var="playlist"
-                               itemValue="#{playlist.name}"
-                               itemLabel="#{playlist.name}" />
-                
-            </h:selectOneMenu>
-            <h:commandButton value="Selecionar" />
-            
-            <hr />
-            <h:outputText value="Agora tocando" /><br />
-            <h:outputText value="#{player.currentPlaylist.name}" />
-            
-            
-        </h:form>
-    </h:body>
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+<h:head>
+	<title>Player</title>
+</h:head>
+<h:body>
+	<h:form>
+		<h:selectOneMenu value="#{player.selectedPlaylist}"
+			valueChangeListener="#{player.selectPlaylist}">
+			<f:selectItem itemLabel="-" />
+			<f:selectItems value="#{userBean.currentUser.playlists}"
+				var="playlist" itemValue="#{playlist.name}"
+				itemLabel="#{playlist.name}" />
+
+		</h:selectOneMenu>
+		<h:commandButton value="Selecionar" />
+
+		<hr />
+		<p:panel header="Agora tocando #{player.currentPlaylist.name}"
+			rendered="#{not empty player.selectedPlaylist}">
+			<audio controls="controls" preload="none" autoplay="" loop="loop"
+				onended="alert('Acabou');"> <source src="Player"
+				type="audio/mp3" /> Your browser does not support the audio
+			element. </audio>
+		</p:panel>
+
+
+
+	</h:form>
+</h:body>
 </html>
