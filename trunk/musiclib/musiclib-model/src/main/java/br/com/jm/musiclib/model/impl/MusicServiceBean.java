@@ -109,7 +109,7 @@ public class MusicServiceBean implements MusicService {
 			}
 
 			Music music = new Music(trackId, info.getTitle(), info.getArtist(),
-					info.getAlbum(), fileId.toString(), genre);
+					info.getAlbum(), fileId.toString(), info.getFileName(), genre);
 
 			this.createMusic(music);
 			// return music;
@@ -161,6 +161,7 @@ public class MusicServiceBean implements MusicService {
 		doc.put("title", music.getTitle());
 		doc.put("artistName", music.getArtistName());
 		doc.put("albumName", music.getAlbumName());
+		doc.put("filePath", music.getFilePath());
 
 		if (music.getFileId() != null) {
 			doc.put("fileId", new ObjectId(music.getFileId()));
@@ -201,7 +202,7 @@ public class MusicServiceBean implements MusicService {
 		Music music = new Music(((ObjectId) doc.get("_id")).toString(),
 				(Integer) doc.get("trackNumber"), (String) doc.get("title"),
 				(String) doc.get("artistName"), (String) doc.get("albumName"), 
-				fileId,
+				fileId, (String) doc.get("filePath"),
 				(List<String>) doc.get("tags"), comments);
 
 		return music;

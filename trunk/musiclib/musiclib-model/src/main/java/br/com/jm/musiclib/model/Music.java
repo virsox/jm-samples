@@ -2,7 +2,6 @@ package br.com.jm.musiclib.model;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -15,6 +14,7 @@ public class Music {
 	private String artistName;
 	private String albumName;
 	private String fileId;
+	private String filePath;
 	
 	private List<String> tags;
 	
@@ -23,15 +23,15 @@ public class Music {
 	
 	
 	public Music(int trackNumber, String title, String artistName,
-				 String albumName, String fileId, String tag) {
-		this(null, trackNumber, title, artistName, albumName, fileId,
+				 String albumName, String fileId, String filePath, String tag) {
+		this(null, trackNumber, title, artistName, albumName, fileId, filePath,
 				Collections.singletonList(tag),
 				new TreeSet<Comment>());
 	}
 	
 	
 	public Music(String id, int trackNumber, String title, String artistName,
-			String albumName, String fileId, List<String> tags, SortedSet<Comment> comments) {
+			String albumName, String fileId, String filePath,List<String> tags, SortedSet<Comment> comments) {
 		this.id = id;
 		this.trackNumber = trackNumber;
 		this.title = title;
@@ -40,6 +40,7 @@ public class Music {
 		this.fileId = fileId;
 		this.tags = new ArrayList<String>(tags);
 		this.comments = comments;
+		this.filePath = filePath;
 	}
 
 	
@@ -94,5 +95,17 @@ public class Music {
 	public String getFileId() {
 		return this.fileId;
 	}
+
+
+	public String getFilePath() {
+		return filePath;
+	}
+
+
+	public void setFilePath(String filePath) {
+		this.filePath = filePath;
+	}
+	
+	
 	
 }

@@ -33,9 +33,9 @@ public class UsuarioServiceTest {
 	public void testCriaUsuario() {
 		//DateFormat df = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 		
-		Music music1 = new Music(1, "Enter Sandman", "Metallica", "Black Album", null, "Rock");
-		Music music2 = new Music(2, "Sad But True", "Metallica", "Black Album", null, "Rock");		
-		Music music3 = new Music(3, "Unforgiven", "Metallica", "Black Album", null, "Rock");
+		Music music1 = new Music(1, "Enter Sandman", "Metallica", "Black Album", null, "","Rock");
+		Music music2 = new Music(2, "Sad But True", "Metallica", "Black Album", null, "", "Rock");		
+		Music music3 = new Music(3, "Unforgiven", "Metallica", "Black Album", null, "", "Rock");
 		
 		musicService.createMusic(music1);
 		musicService.createMusic(music2);
