@@ -9,6 +9,7 @@ import br.com.jm.musiclib.model.Playlist;
 import br.com.jm.musiclib.model.User;
 import br.com.jm.musiclib.model.UserService;
 import br.com.jm.musiclib.model.cdi.UserCollection;
+import br.com.jm.musiclib.model.converter.Converter;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBCollection;
@@ -24,6 +25,10 @@ public class UserServiceBean implements UserService {
 	@Inject @UserCollection
 	private DBCollection userColl;
 	
+	@Inject
+	private Converter<User> userConv;
+	
+	
 	public void setUserCollection(DBCollection userColl) {
 		this.userColl = userColl;
 	}
@@ -31,7 +36,7 @@ public class UserServiceBean implements UserService {
 	
 	public String createUser(User user) {
 				
-        DBObject doc = user.toDBObject();        
+        DBObject doc = userConv.toDBObject(user);        
         
         WriteResult result = userColl.insert(doc);
         
@@ -57,7 +62,7 @@ public class UserServiceBean implements UserService {
 		
 		DBObject result = this.userColl.findOne(loginQuery);
 		if (result != null) {
-			return User.getUser(result);
+			return userConv.toObject(result);
 		}
 		return null;
 	}
@@ -87,7 +92,7 @@ public class UserServiceBean implements UserService {
 		
 		BasicDBObject key = new BasicDBObject("_id", new ObjectId(user.getId()));		
 
-    	this.userColl.update(key, user.toDBObject());
+    	this.userColl.update(key, userConv.toDBObject(user));
 		
 //    	BasicDBObject update = new BasicDBObject("$push",
 //    			new BasicDBObject("playlists", playlist.toDBObject()));

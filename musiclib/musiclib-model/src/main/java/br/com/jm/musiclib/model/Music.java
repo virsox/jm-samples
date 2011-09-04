@@ -6,15 +6,29 @@ import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+/**
+ * Classe que representa uma música da aplicação.
+ * @author Paulo Sigrist / Wilson A. Higashino
+ */
 public class Music {
+	
+	/** Identificador interno da música. */
 	private String id;
 	
+	/** Número da faixa (dentro do álbum). */
 	private int trackNumber;
+	
+	/** Nome da música. */
 	private String title;
+	
+	/** Nome do artista. */
 	private String artistName;
+	
+	/** Nome do álbum. */
 	private String albumName;
+	
+	/** Indentificador para o arquivo. */
 	private String fileId;
-	private String filePath;
 	
 	private List<String> tags;
 	
@@ -23,15 +37,15 @@ public class Music {
 	
 	
 	public Music(int trackNumber, String title, String artistName,
-				 String albumName, String fileId, String filePath, String tag) {
-		this(null, trackNumber, title, artistName, albumName, fileId, filePath,
+				 String albumName, String fileId,  String tag) {
+		this(null, trackNumber, title, artistName, albumName, fileId,
 				Collections.singletonList(tag),
 				new TreeSet<Comment>());
 	}
 	
 	
 	public Music(String id, int trackNumber, String title, String artistName,
-			String albumName, String fileId, String filePath,List<String> tags, SortedSet<Comment> comments) {
+			String albumName, String fileId, List<String> tags, SortedSet<Comment> comments) {
 		this.id = id;
 		this.trackNumber = trackNumber;
 		this.title = title;
@@ -40,7 +54,6 @@ public class Music {
 		this.fileId = fileId;
 		this.tags = new ArrayList<String>(tags);
 		this.comments = comments;
-		this.filePath = filePath;
 	}
 
 	
@@ -97,15 +110,6 @@ public class Music {
 	}
 
 
-	public String getFilePath() {
-		return filePath;
-	}
-
-
-	public void setFilePath(String filePath) {
-		this.filePath = filePath;
-	}
-	
 	
 	
 }

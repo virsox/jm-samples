@@ -12,6 +12,7 @@ import br.com.jm.musiclib.model.cdi.UserCollection;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.Mongo;
+import com.mongodb.gridfs.GridFS;
 
 
 @ApplicationScoped
@@ -20,6 +21,8 @@ public class MongoProvider {
 	private DB db;
 	private DBCollection musicsColl;
 	private DBCollection usersColl;
+	
+	private GridFS musicsFS;
 	
 	@PostConstruct
     public void initDB() throws UnknownHostException {
@@ -43,6 +46,8 @@ public class MongoProvider {
         if (usersColl == null) {
         	usersColl = db.createCollection("users", null);
         }		
+        
+        musicsFS = new GridFS(this.db, "musics");
 	}
 	
 
@@ -50,6 +55,12 @@ public class MongoProvider {
 	public DB getDataBase() {
 		return db;
 	}	
+	
+	@Produces
+	public GridFS getMusicGridFS() {
+		return this.musicsFS;
+	}
+	
 	
 	@Produces @MusicCollection
 	public DBCollection getMusicCollection() {

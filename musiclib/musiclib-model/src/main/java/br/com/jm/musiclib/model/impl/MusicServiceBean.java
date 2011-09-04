@@ -19,8 +19,10 @@ import br.com.jm.musiclib.indexer.MusicIndexerEvent;
 import br.com.jm.musiclib.indexer.MusicInfo;
 import br.com.jm.musiclib.model.Comment;
 import br.com.jm.musiclib.model.Music;
+import br.com.jm.musiclib.model.MusicFile;
 import br.com.jm.musiclib.model.MusicService;
 import br.com.jm.musiclib.model.cdi.MusicCollection;
+import br.com.jm.musiclib.model.converter.Converter;
 
 import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
@@ -39,13 +41,25 @@ public class MusicServiceBean implements MusicService {
 	private DB db;
 
 	@Inject
+	private GridFS musicsGridFS;
+	
+	@Inject
 	@MusicCollection
 	private DBCollection musicsColl;
+	
+	@Inject
+	private Converter<Music> musicConv;
+	
+	@Inject
+	private Converter<Comment> commentConv;
+	
+	@Inject
+	private Converter<MusicFile> musicFileConv;
 
 	@Override
 	public Music getMusic(String musicId) {
 		DBObject doc = this.musicsColl.findOne(new ObjectId(musicId));
-		return getMusic(doc);
+		return musicConv.toObject(doc);
 	}
 
 	@Override
@@ -61,7 +75,7 @@ public class MusicServiceBean implements MusicService {
 		DBCursor cursor = this.musicsColl.find(titleQueryDoc);
 		while (cursor.hasNext()) {
 			DBObject currentDoc = cursor.next();
-			musics.add(getMusic(currentDoc));
+			musics.add(musicConv.toObject(currentDoc));
 		}
 
 		return musics;
@@ -85,10 +99,16 @@ public class MusicServiceBean implements MusicService {
 		BasicDBObject key = new BasicDBObject("_id",
 				new ObjectId(music.getId()));
 		BasicDBObject update = new BasicDBObject("$push", new BasicDBObject(
-				"comments", comment.toDBObject()));
+				"comments", commentConv.toDBObject(comment)));
 
 		this.musicsColl.update(key, update);
 
+	}
+	
+	@Override
+	public MusicFile getMusicFile(String musicFileId) {
+		DBObject obj = this.musicsGridFS.find(new ObjectId(musicFileId));				
+		return musicFileConv.toObject(obj);
 	}
 
 	public void processIndexerEvent(@Observes MusicIndexerEvent event) {
@@ -109,7 +129,7 @@ public class MusicServiceBean implements MusicService {
 			}
 
 			Music music = new Music(trackId, info.getTitle(), info.getArtist(),
-					info.getAlbum(), fileId.toString(), info.getFileName(), genre);
+					info.getAlbum(), fileId.toString(), genre);
 
 			this.createMusic(music);
 			// return music;
@@ -119,7 +139,7 @@ public class MusicServiceBean implements MusicService {
 
 	protected String createMusic(Music music) {
 
-		DBObject doc = toDBObject(music);
+		DBObject doc = musicConv.toDBObject(music);
 
 		WriteResult result = this.musicsColl.insert(doc);
 		if (result.getError() != null) {
@@ -133,10 +153,9 @@ public class MusicServiceBean implements MusicService {
 
 	}
 
-	protected ObjectId createFile(String fileName) {
-		GridFS musicasFS = new GridFS(this.db, "musicas");
+	protected ObjectId createFile(String fileName) {		
 		try {
-			GridFSInputFile input = musicasFS.createFile(new File(fileName));
+			GridFSInputFile input = musicsGridFS.createFile(new File(fileName));
 			input.save();
 
 			return (ObjectId) input.getId();
@@ -154,59 +173,7 @@ public class MusicServiceBean implements MusicService {
 		this.db = db;
 	}
 
-	public DBObject toDBObject(Music music) {
-		BasicDBObject doc = new BasicDBObject();
 
-		doc.put("trackNumber", music.getTrackNumber());
-		doc.put("title", music.getTitle());
-		doc.put("artistName", music.getArtistName());
-		doc.put("albumName", music.getAlbumName());
-		doc.put("filePath", music.getFilePath());
 
-		if (music.getFileId() != null) {
-			doc.put("fileId", new ObjectId(music.getFileId()));
-		}
-
-		BasicDBList tagsList = new BasicDBList();
-		for (String tag : music.getTags()) {
-			tagsList.add(tag);
-		}
-		doc.put("tags", tagsList);
-
-		BasicDBList comentariosList = new BasicDBList();
-		for (Comment comentario : music.getComments()) {
-			comentariosList.add(comentario.toDBObject());
-		}
-		doc.put("comments", comentariosList);
-
-		return doc;
-	}
-
-	@SuppressWarnings("unchecked")
-	public static Music getMusic(DBObject doc) {
-
-		List<DBObject> commentDocs = (List<DBObject>) doc.get("comments");
-		SortedSet<Comment> comments = new TreeSet<Comment>();
-		String fileId;
-
-		for (DBObject commentDoc : commentDocs) {
-			comments.add(Comment.getComment(commentDoc));
-		}
-
-		if (doc.get("fileId") != null) {
-			fileId = ((ObjectId) doc.get("fileId")).toString();
-		} else {
-			fileId = "";
-		}
-		
-		Music music = new Music(((ObjectId) doc.get("_id")).toString(),
-				(Integer) doc.get("trackNumber"), (String) doc.get("title"),
-				(String) doc.get("artistName"), (String) doc.get("albumName"), 
-				fileId, (String) doc.get("filePath"),
-				(List<String>) doc.get("tags"), comments);
-
-		return music;
-
-	}
 
 }

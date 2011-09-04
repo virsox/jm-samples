@@ -27,31 +27,7 @@ public class Playlist {
 		this.musics.add(music.getId());
 	}
 	
-	public DBObject toDBObject() {
-		BasicDBObject doc = new BasicDBObject();		
-		doc.put("name", name);
-		
-		List<ObjectId> musicIds = new ArrayList<ObjectId>();
-		for (String music : musics) {
-			musicIds.add(new ObjectId(music));
-		}		
-		doc.put("musics", musicIds);
-		
-		return doc;
-	}
-	
-	@SuppressWarnings("unchecked")
-	public static Playlist getPlaylist(DBObject doc) {
-		
-		List<ObjectId> musicIds = (List<ObjectId>) doc.get("musics");
-		List<String> musics = new ArrayList<String>();
-		for (ObjectId id : musicIds) {
-			musics.add(id.toString());
-		}
-		
-		Playlist playlist = new Playlist((String) doc.get("name"), musics);
-		return playlist;				
-	}
+
 
 	public List<String> getMusics() {
 		return this.musics;
