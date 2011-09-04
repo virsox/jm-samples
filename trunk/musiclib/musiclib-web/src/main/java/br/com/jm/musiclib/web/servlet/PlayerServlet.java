@@ -13,6 +13,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import br.com.jm.musiclib.model.Music;
+import br.com.jm.musiclib.model.MusicFile;
+import br.com.jm.musiclib.model.MusicService;
 import br.com.jm.musiclib.web.Player;
 
 /**
@@ -25,6 +27,10 @@ public class PlayerServlet extends HttpServlet {
 	@Inject
 	private Player player;
 
+	@Inject
+	private MusicService musicService;
+	
+	
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
@@ -41,13 +47,14 @@ public class PlayerServlet extends HttpServlet {
 			HttpServletResponse response) throws ServletException, IOException {
 
 		Music music = player.next();
-
+		MusicFile file = musicService.getMusicFile(music.getFileId());
+			
 		response.setContentType("audio/mp3");
 		if (music != null) {
 
 			OutputStream out = response.getOutputStream();
 			BufferedInputStream in = new BufferedInputStream(
-					new FileInputStream(music.getFilePath()));
+					file.getInputStream());
 			int b;
 			while ((b = in.read()) != -1) {
 				out.write(b);
