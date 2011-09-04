@@ -6,18 +6,17 @@ import br.com.jm.musiclib.indexer.MusicIndexerEvent;
 
 public interface MusicService {
 
-	//public abstract void createIndex(File dir);
 
 	public abstract Music getMusic(String musicId);
 	
-	public abstract List<Music> searchMusics(String search);
-	
+	public abstract List<Music> searchMusics(String search);	
 	
 	public abstract void addTag(Music music, String tag);
 
 	public abstract void addComment(Music music,
 			Comment comentario);
 	
+	public abstract MusicFile getMusicFile(String musicFileId);
 
     public void processIndexerEvent(MusicIndexerEvent event);
 
