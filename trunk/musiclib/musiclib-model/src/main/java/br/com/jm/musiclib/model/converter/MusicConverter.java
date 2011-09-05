@@ -5,6 +5,7 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 
 import org.bson.types.ObjectId;
 
@@ -15,11 +16,18 @@ import com.mongodb.DBObject;
 import br.com.jm.musiclib.model.Comment;
 import br.com.jm.musiclib.model.Music;
 
+/**
+ * Implementação do Converter para objetos do tipo Music.
+ * @author Paulo Sigrist / Wilson A. Higashino
+ */
 @ApplicationScoped
 public class MusicConverter implements Converter<Music> {
 
+	/** Conversor para objetos Comment. */
+	@Inject
 	private Converter<Comment> commentConv;
 	
+	/** {@inheritDoc} */
 	@Override
 	public DBObject toDBObject(Music music) {
 		BasicDBObject doc = new BasicDBObject();
@@ -48,6 +56,7 @@ public class MusicConverter implements Converter<Music> {
 		return doc;
 	}
 
+	/** {@inheritDoc} */
 	@SuppressWarnings("unchecked")
 	@Override
 	public Music toObject(DBObject doc) {

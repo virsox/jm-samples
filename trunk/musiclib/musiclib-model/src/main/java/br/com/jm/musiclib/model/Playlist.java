@@ -3,39 +3,60 @@ package br.com.jm.musiclib.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.bson.types.ObjectId;
-
-import com.mongodb.BasicDBObject;
-import com.mongodb.DBObject;
-
+/**
+ * Classe que representa uma playlist de um usuário.
+ * @author Paulo Sigrist / Wilson A. Higashino
+ */
 public class Playlist {
 	
+	/** Nome da playlist. */
 	private String name;
+	
+	/** Lista de identificadores de músicas pertencentes à playlist. */
 	private List<String> musics;
 	
+	/**
+	 * Construtor.
+	 * @param name Nome da playlist.
+	 */
 	public Playlist(String name) {
-		this.name = name;
-		this.musics = new ArrayList<String>();
+		this(name, new ArrayList<String>());
 	}
 
+	/**
+	 * Construtor.
+	 * @param name Nome da playlist.
+	 * @param musics Lista de identificadores das músicas que pertencem
+	 * à playlist.
+	 */
 	public Playlist(String name, List<String> musics) {
 		this.name = name;
 		this.musics = musics;
 	}
 	
-	public void addMusic(Music music) {
-		this.musics.add(music.getId());
-	}
 	
-
-
+	/**
+	 * Obtém a lista de identificadres das músicas da playlist.
+	 * @return lista de identificadres das músicas da playlist.
+	 */
 	public List<String> getMusics() {
 		return this.musics;
 	}
 	
+	/**
+	 * Obtém nome da playlist.
+	 * @return Nome da playlist.
+	 */
 	public String getName() {
         return this.name;
     }
 	
+	/**
+	 * Adiciona uma nova música à playlist.
+	 * @param music Música a ser adicionada.
+	 */
+	public void addMusic(Music music) {
+		this.musics.add(music.getId());
+	}
     
 }

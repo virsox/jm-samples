@@ -4,20 +4,51 @@ import java.util.List;
 
 import br.com.jm.musiclib.indexer.MusicIndexerEvent;
 
+/**
+ * Interface de serviço contendo os métodos para manipulação de músicas.
+ * @author Paulo Sigrist / Wilson A. Higashino
+ */
 public interface MusicService {
 
-
-	public abstract Music getMusic(String musicId);
+	/**
+	 * Obtém uma música a partir de seu identificador interno.
+	 * @param musicId Identificador interno da música.
+	 * @return Música a partir do identificador informado.
+	 */
+	public Music getMusic(String musicId);
 	
-	public abstract List<Music> searchMusics(String search);	
+	/**
+	 * Busca por músicas que possem em seu nome a String informada como filtro.
+	 * @param search String a ser utilizada como filtro.
+	 * @return Todas músicas que possuem em seu nome o filtro informado.
+	 */
+	public List<Music> searchMusics(String search);	
 	
-	public abstract void addTag(Music music, String tag);
+	/**
+	 * Adiciona uma nova tag a música informada.
+	 * @param music Música sendo alterada.
+	 * @param tag Tag a ser adicionada.
+	 */
+	public void addTag(Music music, String tag);
 
-	public abstract void addComment(Music music,
-			Comment comentario);
+	/**
+	 * Adiciona um novo comentário a música informada.
+	 * @param music Música sendo alterada.
+	 * @param comment Comentário a ser adicionado.
+	 */
+	public void addComment(Music music, Comment comment);
 	
-	public abstract MusicFile getMusicFile(String musicFileId);
+	/**
+	 * Obtém objeto que representa o arquivo com os dados binários da música.
+	 * @param musicFileId Identificador do arquivo a ser obtido.
+	 * @return objeto que representa o arquivo com os dados binários da música.
+	 */
+	public MusicFile getMusicFile(String musicFileId);
 
+	/**
+	 * Processa um evento gerado pelo componente indexer.
+	 * @param event Evento a ser processado.
+	 */
     public void processIndexerEvent(MusicIndexerEvent event);
 
 }

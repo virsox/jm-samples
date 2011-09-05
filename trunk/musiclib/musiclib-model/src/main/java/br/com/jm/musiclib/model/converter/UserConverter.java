@@ -10,20 +10,24 @@ import javax.inject.Inject;
 
 import org.bson.types.ObjectId;
 
-import br.com.jm.musiclib.model.Comment;
 import br.com.jm.musiclib.model.Playlist;
 import br.com.jm.musiclib.model.User;
 
 import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObjectBuilder;
 import com.mongodb.DBObject;
-
+/**
+ * Implementação do Converter para objetos do tipo User.
+ * @author Paulo Sigrist / Wilson A. Higashino
+ */
 @ApplicationScoped
 public class UserConverter implements Converter<User> {
+	
+	/** Converter para objetos Playlist. */
 	@Inject
 	private Converter<Playlist> playlistConv;
 	
-	
+	/** {@inheritDoc} */
 	public DBObject toDBObject(User user) {
 		DBObject doc = BasicDBObjectBuilder.start()
 			.add("name", user.getName())
@@ -50,6 +54,7 @@ public class UserConverter implements Converter<User> {
 		return doc;
 	}
 
+	/** {@inheritDoc} */
 	@SuppressWarnings("unchecked")
 	public User toObject(DBObject doc) {
 		List<DBObject> playlistsDocs = (List<DBObject>) doc.get("playlists");
