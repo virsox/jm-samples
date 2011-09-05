@@ -11,10 +11,14 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 
 import br.com.jm.musiclib.model.Playlist;
-
+/**
+ * Implementação do Converter para objetos do tipo Playlist.
+ * @author Paulo Sigrist / Wilson A. Higashino
+ */
 @ApplicationScoped
 public class PlaylistConverter implements Converter<Playlist> {
 
+	/** {@inheritDoc} */
 	@Override
 	public DBObject toDBObject(Playlist playlist) {
 		BasicDBObject doc = new BasicDBObject();		
@@ -29,6 +33,7 @@ public class PlaylistConverter implements Converter<Playlist> {
 		return doc;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public Playlist toObject(DBObject doc) {
 		

@@ -68,7 +68,7 @@ public class UserServiceBean implements UserService {
 	}
 	
 	@Override
-	public User play(User user, Music music) {		
+	public void play(User user, Music music) {		
 		//user.incExecution(music.getId());
 		
 		BasicDBObject key = new BasicDBObject("_id", new ObjectId(user.getId()));
@@ -78,8 +78,7 @@ public class UserServiceBean implements UserService {
 				new BasicDBObject("executions.$.quantity", 1));
 		
 		this.userColl.update(key, update);
-		
-		return user;
+
 	}
 	
 	
@@ -87,7 +86,7 @@ public class UserServiceBean implements UserService {
 	 * @see br.com.jm.musiclib.model.impl.UserService#addPlaylist(br.com.jm.musiclib.model.User, br.com.jm.musiclib.model.Playlist)
 	 */
 	@Override
-	public User addPlaylist(User user, Playlist playlist) {
+	public void addPlaylist(User user, Playlist playlist) {
 		//user.addPlaylist(playlist);
 		
 		BasicDBObject key = new BasicDBObject("_id", new ObjectId(user.getId()));		
@@ -109,8 +108,7 @@ public class UserServiceBean implements UserService {
     	
     	
 
-		
-    	return user;
+
 	}
 	
 	

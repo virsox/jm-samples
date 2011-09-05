@@ -10,10 +10,15 @@ import com.mongodb.DBObject;
 import br.com.jm.musiclib.model.Comment;
 
 
+/**
+ * Implementação do Converter para objetos do tipo Comment.
+ * @author Paulo Sigrist / Wilson A. Higashino
+ */
 @ApplicationScoped
 public class CommentConverter implements Converter<Comment> {
 
-	@Override
+	/** {@inheritDoc} */
+	@Override 
 	public DBObject toDBObject(Comment comment) {
 		BasicDBObject doc = new BasicDBObject();
 		
@@ -25,6 +30,7 @@ public class CommentConverter implements Converter<Comment> {
 		return doc;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public Comment toObject(DBObject doc) {
 		Comment comment = new Comment(
