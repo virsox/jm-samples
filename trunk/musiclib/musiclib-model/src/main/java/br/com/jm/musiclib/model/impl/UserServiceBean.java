@@ -18,48 +18,31 @@ import com.mongodb.WriteResult;
 import javax.ejb.Local;
 import javax.ejb.Stateless;
 
-@Stateless()
+/**
+ * Implementação EJB do serviço de manipulação de usuários.
+ * @author Paulo Sigrist / Wilson A. Higashino
+ */
+@Stateless
 @Local(UserService.class)
 public class UserServiceBean implements UserService {
 	
+	/** Coleção de usuários. */
 	@Inject @UserCollection
-	private DBCollection userColl;
+	protected DBCollection userColl;
 	
+	/** Conversor de objetos User. */
 	@Inject
-	private Converter<User> userConv;
+	protected Converter<User> userConv;
+
 	
-	
-	public void setUserCollection(DBCollection userColl) {
-		this.userColl = userColl;
-	}
-	
-	
-	public String createUser(User user) {
-				
-        DBObject doc = userConv.toDBObject(user);        
-        
-        WriteResult result = userColl.insert(doc);
-        
-        // TODO corrigir este tratamento
-        if (result.getError() != null) {
-        	throw new RuntimeException("Deu pane!");
-        }
-        
-        ObjectId id = (ObjectId) doc.get("_id");        
-        user.setId(id.toString());
-        return user.getId();    
-	}
-	
-	/* (non-Javadoc)
-	 * @see br.com.jm.musiclib.model.impl.UserService#login(java.lang.String, java.lang.String)
-	 */
+	/** {@inheritDoc} */
 	@Override
 	public User login(String login, String password) {
 		
 		DBObject loginQuery = new BasicDBObject();
 		loginQuery.put("login", login);
 		loginQuery.put("password", password);
-		
+	
 		DBObject result = this.userColl.findOne(loginQuery);
 		if (result != null) {
 			return userConv.toObject(result);
@@ -67,51 +50,39 @@ public class UserServiceBean implements UserService {
 		return null;
 	}
 	
+	/** {@inheritDoc} */
 	@Override
-	public void play(User user, Music music) {		
-		//user.incExecution(music.getId());
+	public void play(User user, Music music) {
 		
-		BasicDBObject key = new BasicDBObject("_id", new ObjectId(user.getId()));
+		DBObject key = new BasicDBObject("_id", new ObjectId(user.getId()));
 		key.put("executions.music", new ObjectId(music.getId()));
 		
 		DBObject update = new BasicDBObject("$inc",
 				new BasicDBObject("executions.$.quantity", 1));
-		
 		this.userColl.update(key, update);
-
 	}
 	
-	
-	/* (non-Javadoc)
-	 * @see br.com.jm.musiclib.model.impl.UserService#addPlaylist(br.com.jm.musiclib.model.User, br.com.jm.musiclib.model.Playlist)
-	 */
+	/** {@inheritDoc} */
 	@Override
 	public void addPlaylist(User user, Playlist playlist) {
-		//user.addPlaylist(playlist);
 		
-		BasicDBObject key = new BasicDBObject("_id", new ObjectId(user.getId()));		
-
-    	this.userColl.update(key, userConv.toDBObject(user));
-		
-//    	BasicDBObject update = new BasicDBObject("$push",
-//    			new BasicDBObject("playlists", playlist.toDBObject()));
-//    	
-//    	    	
-//    	for (String music : playlist.getMusics()) {
-//    		DBObject musicExecution = new BasicDBObject();
-//    		musicExecution.put("music", music);
-//    		musicExecution.put("")
-//    		
-//    		update = new BasicDBObject("$addToSet",
-//        		new BasicDBObject("executions", playlist.toDBObject()));
-//    	}
-    	
-    	
-
-
+		DBObject key = new BasicDBObject("_id", new ObjectId(user.getId()));		
+    	this.userColl.update(key, userConv.toDBObject(user));		
 	}
 	
-	
-
+	/** {@inheritDoc} */
+	public String createUser(User user) {
+				
+        DBObject doc = userConv.toDBObject(user); 
+        
+        WriteResult result = userColl.insert(doc);
+        if (result.getError() != null) {
+        	throw new RuntimeException("Erro na criação de usuário/");
+        }
+        
+        ObjectId id = (ObjectId) doc.get("_id");        
+        user.setId(id.toString());
+        return user.getId();    
+	}
 	
 }

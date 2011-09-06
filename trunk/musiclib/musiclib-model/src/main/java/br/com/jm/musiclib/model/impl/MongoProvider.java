@@ -14,22 +14,44 @@ import com.mongodb.DBCollection;
 import com.mongodb.Mongo;
 import com.mongodb.gridfs.GridFS;
 
-
+/**
+ * Classe que encapsula a obtenção das informações do MongoDB.
+ * @author Paulo Sigrist / Wilson A. Higashino
+ */
 @ApplicationScoped
 public class MongoProvider {
     
+	/** Objeto que representa o banco de dados. */
 	private DB db;
+	
+	/** Objeto que representa a coleção de músicas. */
 	private DBCollection musicsColl;
+	
+	/** Objeto que representa a coleção de usuários. */
 	private DBCollection usersColl;
 	
+	/** Instânca do GridFS para manipulação de arquivos. */
 	private GridFS musicsFS;
 	
+	/**
+	 * Método executado após a construção do objeto.
+	 * @throws UnknownHostException Caso não seja possível se conectar ao
+	 * Mongo.
+	 */
 	@PostConstruct
     public void initDB() throws UnknownHostException {
 		initDB("musicsDB", false);
     }
 
-	protected void initDB(String dbName, boolean drop) throws UnknownHostException {
+	/**
+	 * Inicializa os objetos do MongoDB.
+	 * @param dbName Nome do banco sendo acessado.
+	 * @param drop true se o banco deve ser limpo na inicialização.
+	 * @throws UnknownHostException Caso não seja possível se conectar ao
+	 * Mongo.
+	 */
+	protected void initDB(String dbName, boolean drop)
+			throws UnknownHostException {
         Mongo m = new Mongo();
 
         if (drop) {
@@ -51,27 +73,40 @@ public class MongoProvider {
 	}
 	
 
+	/**
+	 * Produz objeto que representa o banco de dados do Mongo.
+	 * @return objeto que representa o banco de dados do Mongo.
+	 */
 	@Produces
 	public DB getDataBase() {
 		return db;
 	}	
 	
+	/**
+	 * Produz instânca do GridFS para manipulação de arquivos. 
+	 * @return Instânca do GridFS para manipulação de arquivos. 
+	 */
 	@Produces
 	public GridFS getMusicGridFS() {
 		return this.musicsFS;
 	}
 	
-	
+	/**
+	 * Produz objeto que representa a coleção de músicas.
+	 * @return objeto que representa a coleção de músicas.
+	 */
 	@Produces @MusicCollection
 	public DBCollection getMusicCollection() {
 		return this.musicsColl;
 	}
 	
+	/**
+	 * Produz objeto que representa a coleção de usuários.
+	 * @return objeto que representa a coleção de usuários.
+	 */
 	@Produces @UserCollection
 	public DBCollection getUserCollection() {
 		return this.usersColl;
 	}
 
-
-	
 }

@@ -4,8 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.SortedSet;
-import java.util.TreeSet;
 import java.util.regex.Pattern;
 
 import javax.ejb.Local;
@@ -24,9 +22,7 @@ import br.com.jm.musiclib.model.MusicService;
 import br.com.jm.musiclib.model.cdi.MusicCollection;
 import br.com.jm.musiclib.model.converter.Converter;
 
-import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
-import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
@@ -34,38 +30,47 @@ import com.mongodb.WriteResult;
 import com.mongodb.gridfs.GridFS;
 import com.mongodb.gridfs.GridFSInputFile;
 
-@Stateless()
+/**
+ * Implementação EJB do serviço de manipulação de músicas.
+ * @author Paulo Sigrist / Wilson A. Higashino
+ */
+@Stateless
 @Local(MusicService.class)
 public class MusicServiceBean implements MusicService {
-	@Inject
-	private DB db;
 
+	/** Instância do GridFS. */
 	@Inject
-	private GridFS musicsGridFS;
+	protected GridFS musicsGridFS;
 	
-	@Inject
-	@MusicCollection
-	private DBCollection musicsColl;
+	/** Coleção de músicas. */
+	@Inject @MusicCollection
+	protected DBCollection musicsColl;
 	
+	/** Conversos de objetos Music. */
 	@Inject
-	private Converter<Music> musicConv;
+	protected Converter<Music> musicConv;
 	
+	/** Conversos de objetos Comment. */
 	@Inject
-	private Converter<Comment> commentConv;
+	protected Converter<Comment> commentConv;
 	
+	/** Conversos de objetos MusicFile. */
 	@Inject
-	private Converter<MusicFile> musicFileConv;
+	protected Converter<MusicFile> musicFileConv;
 
+	/** {@inheritDoc} */
 	@Override
 	public Music getMusic(String musicId) {
 		DBObject doc = this.musicsColl.findOne(new ObjectId(musicId));
 		return musicConv.toObject(doc);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public List<Music> searchMusics(String search) {
 		DBObject titleQueryDoc = new BasicDBObject();
 
+		// constrói a expressão regular e a utiliza como valor para title
 		Pattern searchPattern = Pattern.compile(".*" + search + ".*",
 				Pattern.CASE_INSENSITIVE);
 		titleQueryDoc.put("title", searchPattern);
@@ -81,10 +86,9 @@ public class MusicServiceBean implements MusicService {
 		return musics;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void addTag(Music music, String tag) {
-		music.addTag(tag);
-
 		DBObject key = new BasicDBObject("_id", new ObjectId(music.getId()));
 		DBObject update = new BasicDBObject("$push", new BasicDBObject("tags",
 				tag));
@@ -92,88 +96,107 @@ public class MusicServiceBean implements MusicService {
 		this.musicsColl.update(key, update);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void addComment(Music music, Comment comment) {
-		music.addComment(comment);
-
-		BasicDBObject key = new BasicDBObject("_id",
-				new ObjectId(music.getId()));
-		BasicDBObject update = new BasicDBObject("$push", new BasicDBObject(
+		DBObject key = new BasicDBObject("_id", new ObjectId(music.getId()));
+		DBObject update = new BasicDBObject("$push", new BasicDBObject(
 				"comments", commentConv.toDBObject(comment)));
 
 		this.musicsColl.update(key, update);
 
 	}
 	
+	/** {@inheritDoc} */
 	@Override
 	public MusicFile getMusicFile(String musicFileId) {
 		DBObject obj = this.musicsGridFS.find(new ObjectId(musicFileId));				
 		return musicFileConv.toObject(obj);
 	}
 
-	public void processIndexerEvent(@Observes MusicIndexerEvent event) {
-		if (!event.getCompleted()) {
+	/** {@inheritDoc} */
+	@Override
+	public Music processIndexerEvent(@Observes MusicIndexerEvent event) {
+		if (!event.getCompleted()) { // não terminou ainda o processamento
+			
 			MusicInfo info = event.getMusicInfo();
 			System.out.println("Processing [" + info.getFileName() + "]");
+			
+			// Cria arquivo no GridFS
+			String fileId = createFile(info.getFileName());
+
+			String genre = info.getTags().size() > 0 ?
+					info.getTags().get(0) :
+					null;
+					
 			Integer trackId;
-			ObjectId fileId = createFile(info.getFileName());
-
-			String genre = info.getTags().size() > 0 ? info.getTags().get(0)
-					: null;
-
-			// TODO mudei pois estava dando exception quando nao tem track id
 			try {
 				trackId = Integer.parseInt(info.getTrackNumber());
 			} catch (NumberFormatException ex) {
 				trackId = 0;
 			}
 
+			// cria música
 			Music music = new Music(trackId, info.getTitle(), info.getArtist(),
-					info.getAlbum(), fileId.toString(), genre);
-
-			this.createMusic(music);
-			// return music;
+					info.getAlbum(), fileId, genre);
+			music.setId(this.createMusic(music));
+			
+			return music;
 		}
+		return null;
 
 	}
 
+	/** 
+	 * Persiste música no MongoDB.
+	 * @param music Música a ser persistida.
+	 * @return Identificador do objeto criado pelo MongoDB.
+	 */
 	protected String createMusic(Music music) {
 
 		DBObject doc = musicConv.toDBObject(music);
 
 		WriteResult result = this.musicsColl.insert(doc);
 		if (result.getError() != null) {
-			throw new RuntimeException("Deu pane!");
+			throw new RuntimeException("Erro na inserção da Música");
 		}
 
 		ObjectId id = (ObjectId) doc.get("_id");
 		music.setId(id.toString());
-
 		return music.getId();
-
 	}
 
-	protected ObjectId createFile(String fileName) {		
+	/**
+	 * Persiste o arquivo no banco de dados.
+	 * @param fileName Caminho completo do arquivo a ser persistido.
+	 * @return 
+	 */
+	protected String createFile(String fileName) {		
 		try {
 			GridFSInputFile input = musicsGridFS.createFile(new File(fileName));
 			input.save();
-
-			return (ObjectId) input.getId();
+			return ((ObjectId) input.getId()).toString();
 
 		} catch (IOException ex) {
-			throw new RuntimeException("Deu pane!");
+			throw new RuntimeException("Erro na persistência do arquivo");
 		}
 	}
 
-	public void setMusicCollection(DBCollection musicsColl) {
-		this.musicsColl = musicsColl;
-	}
-
-	public void setDataBase(DB db) {
-		this.db = db;
-	}
-
-
-
-
+//	/**
+//	 * Configura objeto que representa a coleção de músicas.
+//	 * @param musicsColl objeto que representa a coleção de músicas.
+//	 */
+//	public void setMusicCollection(DBCollection musicsColl) {
+//		this.musicsColl = musicsColl;
+//	}
+//
+//	/**
+//	 * Configura instância do GridFS. 
+//	 * @param gridFS Instância do GridFS a ser configurada.
+//	 */
+//	public void setGridFS(GridFS gridFS) {
+//		this.musicsGridFS = gridFS;
+//	}
+//	
+	
 }

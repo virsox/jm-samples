@@ -24,8 +24,19 @@ import com.mongodb.DBObject;
 public class UserConverter implements Converter<User> {
 	
 	/** Converter para objetos Playlist. */
-	@Inject
 	private Converter<Playlist> playlistConv;
+	
+	/**
+	 * Construtor.
+	 * @param playlistConverter Conversor de objetos Playlist.
+	 */
+	@Inject
+	public UserConverter(Converter<Playlist> playlistConverter) {
+		this.playlistConv = playlistConverter;
+	}
+	
+	/** Construtor sem parâmetros - necessário para o CDI. */
+	public UserConverter() { }
 	
 	/** {@inheritDoc} */
 	public DBObject toDBObject(User user) {

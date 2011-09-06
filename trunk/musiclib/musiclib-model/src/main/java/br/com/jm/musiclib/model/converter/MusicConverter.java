@@ -24,8 +24,19 @@ import br.com.jm.musiclib.model.Music;
 public class MusicConverter implements Converter<Music> {
 
 	/** Conversor para objetos Comment. */
-	@Inject
 	private Converter<Comment> commentConv;
+	
+	/**
+	 * Construtor.
+	 * @param commentConverter Conversor de objetos Comment.
+	 */
+	@Inject
+	public MusicConverter(Converter<Comment> commentConverter) {
+		this.commentConv = commentConverter;
+	}
+	
+	/** Construtor sem parâmetros - necessário para o CDI. */
+	public MusicConverter() { }
 	
 	/** {@inheritDoc} */
 	@Override
