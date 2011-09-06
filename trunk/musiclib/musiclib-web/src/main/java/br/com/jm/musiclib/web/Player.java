@@ -4,6 +4,9 @@
  */
 package br.com.jm.musiclib.web;
 
+import java.io.BufferedInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -14,7 +17,11 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
+import org.primefaces.model.DefaultStreamedContent;
+import org.primefaces.model.StreamedContent;
+
 import br.com.jm.musiclib.model.Music;
+import br.com.jm.musiclib.model.MusicFile;
 import br.com.jm.musiclib.model.MusicService;
 import br.com.jm.musiclib.model.Playlist;
 
@@ -38,6 +45,7 @@ public class Player implements Serializable {
 	private String selectedPlaylist;
 	private Playlist currentPlaylist;
 	private List<Music> musics;
+	private Music currentMusic;
 
 	public String getSelectedPlaylist() {
 		return this.selectedPlaylist;
@@ -66,13 +74,8 @@ public class Player implements Serializable {
 
 	public Music getCurrentMusic() {
 
-		if (this.currentPlaylist != null) {
-			String musicId = this.currentPlaylist.getMusics().get(currentIndex);
-			Music music = musicService.getMusic(musicId);
-
-			return music;
-		}
-		return null;
+		
+		return currentMusic;
 	}
 
 	public List<Music> getMusics() {
@@ -92,11 +95,39 @@ public class Player implements Serializable {
 		currentIndex = 0;
 	}
 
-	public Music next() {
+	public void previous() {
+		currentIndex--;
+		if (currentIndex < 0) {
+			currentIndex =  getMusics().size()-1;
+		}
+	}
+
+	public void next() {
+		currentIndex++;
+		if (currentIndex >= getMusics().size()) {
+			currentIndex = 0;
+		}
+	}
+	
+	public StreamedContent getMedia() {
+		
 		if (!getMusics().isEmpty()) {
-			return getMusics().get(currentIndex++);
+			StreamedContent media;			
+			InputStream inputStream;
+			currentMusic = musics.get(currentIndex);
+			MusicFile file = musicService.getMusicFile(currentMusic.getFileId());
+			inputStream = new BufferedInputStream(file.getInputStream());
+			
+			media = new DefaultStreamedContent(inputStream, "audio/mp3");
+			
+			if (currentIndex >= getMusics().size()) {
+				currentIndex = 0;
+			}
+			
+			return media;
 		}
 		return null;
 	}
+
 
 }

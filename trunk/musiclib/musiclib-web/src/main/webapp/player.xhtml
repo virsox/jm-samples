@@ -21,16 +21,21 @@
 		<h:commandButton value="Selecionar" />
 
 		<hr />
-		<p:panel header="Agora tocando #{player.currentPlaylist.name}"
-			rendered="#{not empty player.selectedPlaylist}">
-			<audio controls="controls" preload="none" autoplay="" loop="loop"
-				onended="alert('Acabou');"> <source src="Player"
-				type="audio/mp3" /> Your browser does not support the audio
-			element. </audio>
+		<p:panel id="playerPanel" header="Agora tocando #{player.currentPlaylist.name}"
+			 rendered="#{not empty player.selectedPlaylist}">
+			
+			<p:media value="#{player.media}" player="quicktime" width="400" height="100"/>
+			<br/>	
+			Música:	#{player.currentMusic.title}<br/>
+			Artista: #{player.currentMusic.artistName}<br/>
+			Album: #{player.currentMusic.albumName}<br/>
+			<h:commandButton action="#{player.previous}" value="Previous" /><h:commandButton action="#{player.next}" value="Next" />
 		</p:panel>
-
+		
+		
 
 
 	</h:form>
 </h:body>
 </html>
+
