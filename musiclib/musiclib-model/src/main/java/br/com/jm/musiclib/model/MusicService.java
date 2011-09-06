@@ -48,7 +48,8 @@ public interface MusicService {
 	/**
 	 * Processa um evento gerado pelo componente indexer.
 	 * @param event Evento a ser processado.
+	 * @return Música criada resultante do processamento do evento.
 	 */
-    public void processIndexerEvent(MusicIndexerEvent event);
+    public Music processIndexerEvent(MusicIndexerEvent event);
 
 }

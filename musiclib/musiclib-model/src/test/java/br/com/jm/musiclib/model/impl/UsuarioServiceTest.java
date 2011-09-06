@@ -8,6 +8,10 @@ import org.junit.Test;
 import br.com.jm.musiclib.model.Music;
 import br.com.jm.musiclib.model.Playlist;
 import br.com.jm.musiclib.model.User;
+import br.com.jm.musiclib.model.converter.CommentConverter;
+import br.com.jm.musiclib.model.converter.MusicConverter;
+import br.com.jm.musiclib.model.converter.PlaylistConverter;
+import br.com.jm.musiclib.model.converter.UserConverter;
 
 public class UsuarioServiceTest {
 	
@@ -22,11 +26,19 @@ public class UsuarioServiceTest {
 		mongo.initDB("musicsDBTest", true);
 	
 		musicService = new MusicServiceBean();
-		musicService.setDataBase(mongo.getDataBase());
-		musicService.setMusicCollection(mongo.getMusicCollection());
+		musicService.musicsColl = mongo.getMusicCollection();
+
+		CommentConverter commentConv = new CommentConverter();
+		MusicConverter musicConv = new MusicConverter(commentConv);
+		musicService.commentConv = commentConv;
+		musicService.musicConv = musicConv;
 		
 		userService = new UserServiceBean();
-		userService.setUserCollection(mongo.getUserCollection());
+		userService.userColl = mongo.getUserCollection();
+		
+		PlaylistConverter playlistConv = new PlaylistConverter();
+		UserConverter userConv = new UserConverter(playlistConv);
+		userService.userConv = userConv;
 	}
 	
 	@Test

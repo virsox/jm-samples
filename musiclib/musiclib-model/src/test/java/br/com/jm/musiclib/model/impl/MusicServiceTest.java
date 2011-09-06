@@ -16,6 +16,9 @@ import br.com.jm.musiclib.indexer.MusicIndexerEvent;
 import br.com.jm.musiclib.indexer.MusicInfo;
 import br.com.jm.musiclib.model.Comment;
 import br.com.jm.musiclib.model.Music;
+import br.com.jm.musiclib.model.converter.CommentConverter;
+import br.com.jm.musiclib.model.converter.MusicConverter;
+import br.com.jm.musiclib.model.converter.MusicFileConverter;
 
 
 public class MusicServiceTest {
@@ -31,8 +34,16 @@ public class MusicServiceTest {
 		mongo.initDB("musicsDBTest", true);
 				
 		service = new MusicServiceBean();
-		service.setDataBase(mongo.getDataBase());
-		service.setMusicCollection(mongo.getMusicCollection());
+		service.musicsColl = mongo.getMusicCollection();
+		service.musicsGridFS = mongo.getMusicGridFS();
+		
+		
+		CommentConverter commentConv = new CommentConverter();
+		MusicConverter musicConv = new MusicConverter(commentConv);
+
+		service.commentConv = commentConv;
+		service.musicConv = musicConv;
+		service.musicFileConv = new MusicFileConverter();
 	}
 	
 	@Test
@@ -44,10 +55,11 @@ public class MusicServiceTest {
 		info.setArtist("Metalico");		
 		info.setAlbum("Gray Album");
 		info.setTags(Collections.singletonList("Heavy Metal"));
-		info.setFileName("metalico - enter sanman.mp3");
+		info.setFileName("/Users/virso/Music/iTunes/iTunes Media/Music/" +
+			"Beady Eye/Different Gear, Still Speeding/01 Four Letter Word.mp3");
 		
 		MusicIndexerEvent event = new MusicIndexerEvent(info);
-		service.processIndexerEvent(event);
+		music = service.processIndexerEvent(event);
 	}
 	
 	@Test
@@ -86,11 +98,5 @@ public class MusicServiceTest {
 		
 	}
 	
-	
-//	@Test
-//	public void testCriaArquivo() {
-//		File file = new File("/Users/virso/Desktop/eurail-map-2011.pdf");
-//		service.criaArquivo(file);
-//	}
-	
+
 }
