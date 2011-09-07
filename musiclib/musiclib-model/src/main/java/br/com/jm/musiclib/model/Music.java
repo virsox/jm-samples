@@ -132,6 +132,11 @@ public class Music {
 	public SortedSet<Comment> getComments() {
 		return this.comments;
 	}
+	
+	public List<Comment> getCommentsAsList() {
+		return new ArrayList<Comment>(getComments());
+	}
+	
 
 	/**
 	 * Obtém identificador para o arquivo.
