@@ -31,19 +31,8 @@
 			<p:media value="#{player.media}" player="quicktime" width="400"
 				height="100" />
 			<br />
-			<h:commandButton action="#{player.previous}" value="Anterior" />
-			<h:commandButton action="#{player.next}" value="Próxima" />
-			<p:fieldset legend="Adicionar comentário"
-				rendered="#{not empty player.comment}">
-				<h:panelGrid columns="2">			
-			Nota: <p:rating value="#{player.comment.grade}" />
-					<br />
-			Comentário: <h:inputText value="#{player.comment.message}" />
-					<br />
-				</h:panelGrid>
-				<p:commandButton actionListener="#{player.saveComment}"
-					value="Salvar" update="comments" />
-			</p:fieldset>
+			<h:commandButton action="#{player.previous}" value="Anterior" image="previous.png"/>
+			<h:commandButton action="#{player.next}" value="Próxima" image="next.png"/>
 
 			<h:panelGrid columns="1">
 				<h:panelGroup>
@@ -55,13 +44,30 @@
 				<h:panelGroup>
 					Album: #{player.currentMusic.albumName}
 				</h:panelGroup>
+			</h:panelGrid>
+
+
+			<p:fieldset legend="Adicionar comentário"
+				rendered="#{not empty player.comment}">
+				<h:panelGrid columns="2" id="commentForm">			
+			Nota: <p:rating value="#{player.comment.grade}" />
+					<br />
+			Comentário: <h:inputText value="#{player.comment.message}" />
+					<br />
+				</h:panelGrid>
+				<p:commandButton actionListener="#{player.saveComment}"
+					value="Salvar" update="comments, commentForm" />
+			</p:fieldset>
+
+			<h:panelGrid columns="1">
+
 				<h:panelGroup>
 					Comentários
 					<p:dataTable value="#{player.currentMusic.commentsAsList}"
 						var="comment" id="comments">
 						<p:column>#{comment.postDate}</p:column>
 						<p:column>#{comment.userName}</p:column>
-						<p:column>#{comment.message}</p:column>
+						<p:column>#{comment.message} (#{comment.grade})</p:column>
 						<p:column>
 
 							<p:rating value="#{comment.grade}" disabled="true" />

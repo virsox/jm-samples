@@ -13,7 +13,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.ejb.EJB;
-import javax.faces.bean.SessionScoped;
+import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -112,16 +112,22 @@ public class Player implements Serializable {
 	}
 	
 	public StreamedContent getMedia() {
-		
+		// Verificar se a lista de músicas não está vazia
 		if (!getMusics().isEmpty()) {
 			StreamedContent media;			
 			InputStream inputStream;
-			currentMusic = musics.get(currentIndex);
-			MusicFile file = musicService.getMusicFile(currentMusic.getFileId());
-			inputStream = new BufferedInputStream(file.getInputStream());
+			MusicFile file;
 			
+			// Obtém a música correspondente ao objeto atual
+			currentMusic = musics.get(currentIndex);
+			// Obtém o arquivo 
+			file = musicService.getMusicFile(currentMusic.getFileId());
+			// Cria o input stream
+			inputStream = new BufferedInputStream(file.getInputStream());
+			// Cria um objeto StreamedContent do tipo audio/mp3
 			media = new DefaultStreamedContent(inputStream, "audio/mp3");
 			
+			// Verifica se estourou o índice da lista
 			if (currentIndex >= getMusics().size()) {
 				currentIndex = 0;
 			}
@@ -134,7 +140,7 @@ public class Player implements Serializable {
 	public void saveComment() {
 		comment.setUserName(user.getCurrentUser().getName());
 		comment.setPostDate(new Date());
-		currentMusic.addComment(comment);
+		
 		musicService.addComment(currentMusic, comment);
 		comment = new Comment();
 	}

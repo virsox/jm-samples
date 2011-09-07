@@ -82,17 +82,24 @@ public class UserBean implements Serializable {
 			return "login";
 		}
 		// Usuário válido, redirecionar para a página principal
-		return "main?faces-redirect=true";
+		// Adicionar mensagem se o indexador ainda não foi executado
+		// FIXME Verificar o indexador
+		FacesContext.getCurrentInstance().addMessage(
+				null,
+				new FacesMessage(FacesMessage.SEVERITY_WARN, "Indexador",
+						"O indexador não foi executado"));
+		return "main";
 
 	}
-	
+
 	/**
 	 * Remove o usuário atual e retorna para a tela de login.
+	 * 
 	 * @return Retorna para a tela de login
 	 */
 	public String logout() {
 		currentUser = new User();
-		
+
 		return "login?faces-redirect=true";
 	}
 
@@ -129,6 +136,7 @@ public class UserBean implements Serializable {
 
 	/**
 	 * Altera o nome
+	 * 
 	 * @param name
 	 */
 	public void setName(String name) {
@@ -145,6 +153,7 @@ public class UserBean implements Serializable {
 
 	/**
 	 * Altera o login
+	 * 
 	 * @param login
 	 */
 	public void setLogin(String login) {
@@ -152,7 +161,7 @@ public class UserBean implements Serializable {
 	}
 
 	/**
-	 * @return Retorna a senha 
+	 * @return Retorna a senha
 	 */
 	public String getPassword() {
 		return password;
@@ -160,6 +169,7 @@ public class UserBean implements Serializable {
 
 	/**
 	 * Altera a senha
+	 * 
 	 * @param password
 	 */
 	public void setPassword(String password) {
