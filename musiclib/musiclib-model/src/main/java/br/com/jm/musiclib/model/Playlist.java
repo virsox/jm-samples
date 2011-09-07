@@ -1,5 +1,6 @@
 package br.com.jm.musiclib.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,8 +8,13 @@ import java.util.List;
  * Classe que representa uma playlist de um usuário.
  * @author Paulo Sigrist / Wilson A. Higashino
  */
-public class Playlist {
+public class Playlist implements Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -8169017665776508348L;
+
 	/** Nome da playlist. */
 	private String name;
 	
