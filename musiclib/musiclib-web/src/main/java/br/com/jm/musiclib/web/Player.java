@@ -5,28 +5,29 @@
 package br.com.jm.musiclib.web;
 
 import java.io.BufferedInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 import javax.ejb.EJB;
+import javax.faces.bean.SessionScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.inject.Singleton;
 
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 
+import br.com.jm.musiclib.model.Comment;
 import br.com.jm.musiclib.model.Music;
 import br.com.jm.musiclib.model.MusicFile;
 import br.com.jm.musiclib.model.MusicService;
 import br.com.jm.musiclib.model.Playlist;
 
 @Named
-@Singleton
+@SessionScoped
 public class Player implements Serializable {
 
 	/**
@@ -46,7 +47,8 @@ public class Player implements Serializable {
 	private Playlist currentPlaylist;
 	private List<Music> musics;
 	private Music currentMusic;
-
+	private Comment comment = new Comment();
+	
 	public String getSelectedPlaylist() {
 		return this.selectedPlaylist;
 	}
@@ -128,6 +130,23 @@ public class Player implements Serializable {
 		}
 		return null;
 	}
+	
+	public void saveComment() {
+		comment.setUserName(user.getCurrentUser().getName());
+		comment.setPostDate(new Date());
+		currentMusic.addComment(comment);
+		musicService.addComment(currentMusic, comment);
+		comment = new Comment();
+	}
 
+	public Comment getComment() {
+		return comment;
+	}
+
+	public void setComment(Comment comment) {
+		this.comment = comment;
+	}
+
+	
 
 }

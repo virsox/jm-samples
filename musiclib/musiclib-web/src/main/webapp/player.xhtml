@@ -4,11 +4,14 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:p="http://primefaces.prime.com.tr/ui">
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	xmlns:ml="http://musiclib.googlecode.com">
+
 <h:head>
-	<title>Player</title>
+	<title>Musiclib : Player</title>
 </h:head>
 <h:body>
+	<ml:menu id="menu" />
 	<h:form>
 		<h:selectOneMenu value="#{player.selectedPlaylist}"
 			valueChangeListener="#{player.selectPlaylist}">
@@ -21,18 +24,56 @@
 		<h:commandButton value="Selecionar" />
 
 		<hr />
-		<p:panel id="playerPanel" header="Agora tocando #{player.currentPlaylist.name}"
-			 rendered="#{not empty player.selectedPlaylist}">
-			
-			<p:media value="#{player.media}" player="quicktime" width="400" height="100"/>
-			<br/>	
-			Música:	#{player.currentMusic.title}<br/>
-			Artista: #{player.currentMusic.artistName}<br/>
-			Album: #{player.currentMusic.albumName}<br/>
-			<h:commandButton action="#{player.previous}" value="Previous" /><h:commandButton action="#{player.next}" value="Next" />
+		<p:panel id="playerPanel"
+			header="Agora tocando #{player.currentPlaylist.name}"
+			rendered="#{not empty player.selectedPlaylist}">
+
+			<p:media value="#{player.media}" player="quicktime" width="400"
+				height="100" />
+			<br />
+			<h:commandButton action="#{player.previous}" value="Anterior" />
+			<h:commandButton action="#{player.next}" value="Próxima" />
+			<p:fieldset legend="Adicionar comentário"
+				rendered="#{not empty player.comment}">
+				<h:panelGrid columns="2">			
+			Nota: <p:rating value="#{player.comment.grade}" />
+					<br />
+			Comentário: <h:inputText value="#{player.comment.message}" />
+					<br />
+				</h:panelGrid>
+				<p:commandButton actionListener="#{player.saveComment}"
+					value="Salvar" update="comments" />
+			</p:fieldset>
+
+			<h:panelGrid columns="1">
+				<h:panelGroup>
+					Música:	#{player.currentMusic.title}
+				</h:panelGroup>
+				<h:panelGroup>
+					Artista: #{player.currentMusic.artistName}
+				</h:panelGroup>
+				<h:panelGroup>
+					Album: #{player.currentMusic.albumName}
+				</h:panelGroup>
+				<h:panelGroup>
+					Comentários
+					<p:dataTable value="#{player.currentMusic.commentsAsList}"
+						var="comment" id="comments">
+						<p:column>#{comment.postDate}</p:column>
+						<p:column>#{comment.userName}</p:column>
+						<p:column>#{comment.message}</p:column>
+						<p:column>
+
+							<p:rating value="#{comment.grade}" disabled="true" />
+						</p:column>
+					</p:dataTable>
+				</h:panelGroup>
+			</h:panelGrid>
+
+
 		</p:panel>
-		
-		
+
+
 
 
 	</h:form>
