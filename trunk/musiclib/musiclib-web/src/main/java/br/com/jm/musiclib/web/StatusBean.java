@@ -1,8 +1,5 @@
 package br.com.jm.musiclib.web;
 
-import java.io.Serializable;
-
-import javax.ejb.LocalBean;
 import javax.ejb.Singleton;
 import javax.enterprise.event.Observes;
 
@@ -11,10 +8,6 @@ import br.com.jm.musiclib.indexer.MusicInfo;
 
 @Singleton
 public class StatusBean {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 6445790885225082845L;
 	/**
 	 * 
 	 */

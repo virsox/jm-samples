@@ -1,8 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-To change this template, choose Tools | Templates
-and open the template in the editor.
--->
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
@@ -12,21 +8,29 @@ and open the template in the editor.
 
 <h:head>
 	<title>Musiclib : Login</title>
+	<style>
+.ui-widget,.ui-widget .ui-widget {
+	font-size: 90% !important;
+}
+	</style>
 </h:head>
 <h:body>
 	<h:form prependId="false">
+		<p:messages id="msgs" showDetail="false" />
 		<p:panel header="Login">
 		Se você já é cadastrado efetue o login.<br />
 			<br />
 			<h:panelGrid columns="2">
-				<h:outputText value="Login:" />
-				<h:inputText value="#{userBean.currentUser.login}" />
+				<h:outputText value="Usuário:" />
+				<h:inputText value="#{userBean.currentUser.login}" id="user"
+					label="Usuário" required="true" />
 
 				<h:outputText value="Senha:" />
-				<h:inputSecret value="#{userBean.currentUser.password}" />
+				<h:inputSecret value="#{userBean.currentUser.password}"
+					id="password" label="Senha" required="true" />
 			</h:panelGrid>
 			<p:commandButton action="#{userBean.login}" value="Login"
-				ajax="false" />
+				ajax="false" update="msgs" />
 
 		</p:panel>
 	</h:form>
@@ -36,17 +40,20 @@ and open the template in the editor.
 		Se você ainda não é cadastrado, cadastre-se!.<br />
 			<br />
 			<h:panelGrid columns="2">
-				<h:outputText value="Name:" />
-				<h:inputText value="#{userBean.currentUser.name}" />
+				<h:outputText value="Nome:" />
+				<h:inputText value="#{userBean.name}" id="newName" label="Nome"
+					required="true" />
 
-				<h:outputText value="Login:" />
-				<h:inputText value="#{userBean.currentUser.login}" />
+				<h:outputText value="Usuário:" />
+				<h:inputText value="#{userBean.login}" id="newLogin" label="Usuário"
+					required="true" />
 
 				<h:outputText value="Senha:" />
-				<h:inputText value="#{userBean.currentUser.password}" />
+				<h:inputSecret value="#{userBean.password}" id="newPassword"
+					label="Senha" required="true" />
 			</h:panelGrid>
-			<p:commandButton action="#{userBean.create}" value="Login"
-				ajax="false" />
+			<p:commandButton action="#{userBean.create}" value="Criar"
+				ajax="false" update="msgs" />
 
 		</p:panel>
 	</h:form>

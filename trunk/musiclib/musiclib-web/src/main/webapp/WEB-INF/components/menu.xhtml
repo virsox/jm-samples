@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+<ui:component>
+	<style>
+	.ui-widget,.ui-widget .ui-widget {
+		font-size: 90% !important;
+	}
+	</style>
+	<h:form>
+		<p:toolbar>
+			<p:toolbarGroup align="left">
+				<p:commandButton type="push" value="Playlist"
+					actionListener="#{createPlaylist.start}" action="playlist"
+					ajax="false" />
+				<p:commandButton type="push" value="Player" action="player"
+					ajax="false" />
+				<p:commandButton type="push" value="Indexar" action="indexer"
+					ajax="false" />
+			</p:toolbarGroup>
+			<p:toolbarGroup align="right">
+				<h:outputText value="#{userBean.currentUser.name}" />
+				<p:divider />
+				<p:commandButton type="push" value="Logout"
+					action="#{userBean.logout}" ajax="false" />
+			</p:toolbarGroup>
+		</p:toolbar>
+	</h:form>
+</ui:component>
+</html>
