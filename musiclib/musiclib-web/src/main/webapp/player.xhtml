@@ -67,10 +67,9 @@
 						var="comment" id="comments">
 						<p:column>#{comment.postDate}</p:column>
 						<p:column>#{comment.userName}</p:column>
-						<p:column>#{comment.message} (#{comment.grade})</p:column>
+						<p:column>#{comment.message}</p:column>
 						<p:column>
-
-							<p:rating value="#{comment.grade}" disabled="true" />
+							<p:rating value="#{comment.grade}" disabled="true"/>
 						</p:column>
 					</p:dataTable>
 				</h:panelGroup>
@@ -78,9 +77,6 @@
 
 
 		</p:panel>
-
-
-
 
 	</h:form>
 </h:body>
