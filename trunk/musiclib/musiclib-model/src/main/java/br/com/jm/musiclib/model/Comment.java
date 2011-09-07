@@ -1,5 +1,6 @@
 package br.com.jm.musiclib.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -7,7 +8,12 @@ import java.util.Date;
  * 
  * @author Paulo Sigrist / Wilson A. Higashino
  */
-public class Comment implements Comparable<Comment> {
+public class Comment implements Comparable<Comment>, Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -5879534563674225503L;
 
 	/** Data de postagem. */
 	private Date postDate;
@@ -40,6 +46,9 @@ public class Comment implements Comparable<Comment> {
 		this.userName = userName;
 	}
 
+	/**
+	 * Construtor vazio.
+	 */
 	public Comment() {
 
 	}

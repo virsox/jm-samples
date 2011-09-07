@@ -1,5 +1,6 @@
 package br.com.jm.musiclib.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -10,8 +11,13 @@ import java.util.TreeSet;
  * Classe que representa uma música da aplicação.
  * @author Paulo Sigrist / Wilson A. Higashino
  */
-public class Music {
+public class Music implements Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -3471296001691844288L;
+
 	/** Identificador interno da música. */
 	private String id;
 	
@@ -133,6 +139,11 @@ public class Music {
 		return this.comments;
 	}
 	
+	/**
+	 * @return o conjunto de comentários como uma lista.
+	 * 
+	 * @see #getComments()
+	 */
 	public List<Comment> getCommentsAsList() {
 		return new ArrayList<Comment>(getComments());
 	}

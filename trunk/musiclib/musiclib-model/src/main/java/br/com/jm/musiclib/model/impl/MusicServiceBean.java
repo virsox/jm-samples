@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
 import javax.ejb.Local;
@@ -37,6 +38,9 @@ import com.mongodb.gridfs.GridFSInputFile;
 @Stateless
 @Local(MusicService.class)
 public class MusicServiceBean implements MusicService {
+
+	/** Log */
+	private Logger log = Logger.getLogger("br.com.jm.musiclib.model");
 
 	/** Instância do GridFS. */
 	@Inject
@@ -121,7 +125,7 @@ public class MusicServiceBean implements MusicService {
 		if (!event.getCompleted()) { // não terminou ainda o processamento
 			
 			MusicInfo info = event.getMusicInfo();
-			System.out.println("Processing [" + info.getFileName() + "]");
+			log.fine("Processando[" + info.getFileName() + "]");
 			
 			// Cria arquivo no GridFS
 			String fileId = createFile(info.getFileName());

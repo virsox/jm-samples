@@ -1,5 +1,6 @@
 package br.com.jm.musiclib.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -10,8 +11,13 @@ import java.util.Map;
  * Classe que representa um usuário da aplicação.
  * @author Paulo Sigrist / Wilson A. Higashino
  */
-public class User {
+public class User implements Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -8510416693981733737L;
+
 	/** Identificador interno de um usuário. */
 	private String id;
 	

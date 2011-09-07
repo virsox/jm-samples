@@ -1,13 +1,19 @@
 package br.com.jm.musiclib.model;
 
 import java.io.InputStream;
+import java.io.Serializable;
 
 /**
  * Classe que representa o arquivo que contém os dados binários de uma música.
  * @author Paulo Sigrist / Wilson A. Higashino
  */
-public class MusicFile {
+public class MusicFile implements Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -7065206754846941630L;
+
 	/** Nome do arquivo. */
 	private String fileName;
 	
