@@ -12,51 +12,60 @@
 .ui-widget,.ui-widget .ui-widget {
 	font-size: 90% !important;
 }
-	</style>
+
+.panelStyle {
+	width: 50%;
+	vertical-align: top;
+}
+</style>
 </h:head>
 <h:body>
-	<h:form prependId="false">
-		<p:messages id="msgs" showDetail="false" />
-		<p:panel header="Login">
+	<p:messages id="msgs" showDetail="false" />
+	<h:panelGrid columns="2" width="100%" columnClasses="panelStyle">
+		<h:panelGroup>
+			<h:form prependId="false">
+				<p:panel header="Login">
 		Se você já é cadastrado efetue o login.<br />
-			<br />
-			<h:panelGrid columns="2">
-				<h:outputText value="Usuário:" />
-				<h:inputText value="#{userBean.currentUser.login}" id="user"
-					label="Usuário" required="true" />
+					<br />
+					<h:panelGrid columns="2">
+						<h:outputText value="Usuário:" />
+						<h:inputText value="#{userBean.currentUser.login}" id="user"
+							label="Usuário" required="true" />
 
-				<h:outputText value="Senha:" />
-				<h:inputSecret value="#{userBean.currentUser.password}"
-					id="password" label="Senha" required="true" />
-			</h:panelGrid>
-			<p:commandButton action="#{userBean.login}" value="Login"
-				ajax="false" update="msgs" />
+						<h:outputText value="Senha:" />
+						<h:inputSecret value="#{userBean.currentUser.password}"
+							id="password" label="Senha" required="true" />
+					</h:panelGrid>
+					<p:commandButton action="#{userBean.login}" value="Login"
+						ajax="false" update="msgs" />
 
-		</p:panel>
-	</h:form>
-
-	<h:form prependId="false">
-		<p:panel header="Novo usuário">
+				</p:panel>
+			</h:form>
+		</h:panelGroup>
+		<h:panelGroup>
+			<h:form prependId="false">
+				<p:panel header="Novo usuário">
 		Se você ainda não é cadastrado, cadastre-se!.<br />
-			<br />
-			<h:panelGrid columns="2">
-				<h:outputText value="Nome:" />
-				<h:inputText value="#{userBean.name}" id="newName" label="Nome"
-					required="true" />
+					<br />
+					<h:panelGrid columns="2">
+						<h:outputText value="Nome:" />
+						<h:inputText value="#{userBean.name}" id="newName" label="Nome"
+							required="true" />
 
-				<h:outputText value="Usuário:" />
-				<h:inputText value="#{userBean.login}" id="newLogin" label="Usuário"
-					required="true" />
+						<h:outputText value="Usuário:" />
+						<h:inputText value="#{userBean.login}" id="newLogin"
+							label="Usuário" required="true" />
 
-				<h:outputText value="Senha:" />
-				<h:inputSecret value="#{userBean.password}" id="newPassword"
-					label="Senha" required="true" />
-			</h:panelGrid>
-			<p:commandButton action="#{userBean.create}" value="Criar"
-				ajax="false" update="msgs" />
+						<h:outputText value="Senha:" />
+						<h:inputSecret value="#{userBean.password}" id="newPassword"
+							label="Senha" required="true" />
+					</h:panelGrid>
+					<p:commandButton action="#{userBean.create}" value="Criar"
+						ajax="false" update="msgs" />
 
-		</p:panel>
-	</h:form>
-
+				</p:panel>
+			</h:form>
+		</h:panelGroup>
+	</h:panelGrid>
 </h:body>
 </html>

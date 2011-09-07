@@ -7,12 +7,20 @@ and open the template in the editor.
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsp/jstl/core"
-	xmlns:ml="http://musiclib.googlecode.com">
+	xmlns:ml="http://musiclib.googlecode.com"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
 
 <h:head>
 	<title>Musiclib : Main</title>
+	<style>
+.ui-growl {
+	right: 20px;
+	top: 90%;
+}
+</style>
 </h:head>
 <h:body>
 	<ml:menu id="menu" />
+	<p:growl id="growl" showDetail="true" sticky="true" />
 </h:body>
 </html>
