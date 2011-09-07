@@ -1,5 +1,7 @@
 package br.com.jm.musiclib.indexer.impl;
 
+import java.util.logging.Logger;
+
 import javax.ejb.EJB;
 import javax.ejb.MessageDriven;
 import javax.jms.JMSException;
@@ -15,7 +17,10 @@ import br.com.jm.musiclib.indexer.MusicIndexer;
  */
 @MessageDriven(mappedName = "queue/musicIndexerQueue")
 public class MusicIndexerMessageBean implements MessageListener {
+	/** Log */
+	private Logger log = Logger.getLogger("br.com.jm.musiclib.indexer");
 
+	/** MusicIndexer injetado pelo container. */
 	@EJB
 	private MusicIndexer indexer;
 
@@ -39,7 +44,7 @@ public class MusicIndexerMessageBean implements MessageListener {
 				folder = null;
 			}
 			if (folder != null) {
-				System.out.println("Iniciando indexação para pasta: "+folder);
+				log.info("Iniciando indexação para pasta: "+folder);
 				indexer.createIndex(folder);
 			}
 		}
