@@ -1,28 +1,17 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package br.com.jm.musiclib.web;
 
-import java.io.BufferedInputStream;
-import java.io.InputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.primefaces.model.DefaultStreamedContent;
-import org.primefaces.model.StreamedContent;
-
 import br.com.jm.musiclib.model.Comment;
 import br.com.jm.musiclib.model.Music;
-import br.com.jm.musiclib.model.MusicFile;
 import br.com.jm.musiclib.model.MusicService;
 import br.com.jm.musiclib.model.Playlist;
 import br.com.jm.musiclib.model.UserService;
@@ -180,29 +169,6 @@ public class Player implements Serializable {
 		userService.play(user.getCurrentUser(), currentMusic);
 	}
 	
-	/**
-	 * 
-	 * @return a música selecionada como Stream de áudio mp3 para ser executado.
-	 * 
-	 * @see MusicService#getMusicFile(String)
-	 */
-	public StreamedContent getMedia() {
-		// Verificar se a lista de músicas não está vazia
-		if (!musics.isEmpty()) {
-			StreamedContent media;
-			MusicFile file;
-
-			// Obtém o arquivo
-			file = musicService.getMusicFile(currentMusic.getFileId());
-			
-			// Cria um objeto StreamedContent do tipo audio/mp3
-			media = new DefaultStreamedContent(file.getInputStream(),
-					"audio/mp3", file.getFileName());
-
-			return media;
-		}
-		return null;
-	}
 
 	/**
 	 * Salva um comentário feito pelo usuário
