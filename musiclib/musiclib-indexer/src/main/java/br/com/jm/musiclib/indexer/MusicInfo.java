@@ -15,18 +15,25 @@ public class MusicInfo implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	
 	/** ID único da música na coleção */
 	private Long id;
+	
 	/** Nome da música */
 	private String title;
+	
 	/** Nome do artista */
 	private String artist;
+	
 	/** Nome do album */
 	private String album;
+	
 	/** Número da faixa */
 	private String trackNumber;
+	
 	/** lista de tags associadas à música */
 	private List<String> tags;
+	
 	/** Nome do arquivo com as informações extraídas */
 	private String fileName;
 
