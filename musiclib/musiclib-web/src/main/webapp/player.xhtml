@@ -32,9 +32,10 @@
 			header="Agora tocando #{player.currentPlaylist.name}"
 			rendered="#{not empty player.selectedPlaylist}">
 
-
-
-            <p:media value="#{player.media}" width="400" height="80" player="quicktime" />
+            <audio controls="controls" autoplay="autoplay">
+  				<source src="Player" type="audio/mp3" />
+  				Seu navegador não suporta a TAG audio.
+			</audio>
 			<br />
 			<h:commandButton action="#{player.previous}" value="Anterior" image="previous.png"/>
 			<h:commandButton action="#{player.next}" value="Próxima" image="next.png"/>

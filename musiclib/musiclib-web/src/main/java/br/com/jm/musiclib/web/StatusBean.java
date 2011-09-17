@@ -5,7 +5,6 @@ import java.io.Serializable;
 import javax.ejb.Singleton;
 import javax.enterprise.event.Observes;
 
-import br.com.jm.musiclib.indexer.MusicIndexer;
 import br.com.jm.musiclib.indexer.MusicIndexerEvent;
 import br.com.jm.musiclib.indexer.MusicInfo;
 
