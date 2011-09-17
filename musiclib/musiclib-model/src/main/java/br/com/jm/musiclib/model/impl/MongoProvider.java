@@ -20,93 +20,95 @@ import com.mongodb.gridfs.GridFS;
  */
 @ApplicationScoped
 public class MongoProvider {
-    
-	/** Objeto que representa o banco de dados. */
-	private DB db;
-	
-	/** Objeto que representa a coleção de músicas. */
-	private DBCollection musicsColl;
-	
-	/** Objeto que representa a coleção de usuários. */
-	private DBCollection usersColl;
-	
-	/** Instânca do GridFS para manipulação de arquivos. */
-	private GridFS musicsFS;
-	
-	/**
-	 * Método executado após a construção do objeto.
-	 * @throws UnknownHostException Caso não seja possível se conectar ao
-	 * Mongo.
-	 */
-	@PostConstruct
-    public void initDB() throws UnknownHostException {
-		initDB("musicsDB", false);
+
+  /** Objeto que representa o banco de dados. */
+  private DB db;
+
+  /** Objeto que representa a coleção de músicas. */
+  private DBCollection musicsColl;
+
+  /** Objeto que representa a coleção de usuários. */
+  private DBCollection usersColl;
+
+  /** Instânca do GridFS para manipulação de arquivos. */
+  private GridFS musicsFS;
+
+  /**
+   * Método executado após a construção do objeto.
+   * @throws UnknownHostException Caso não seja possível se conectar ao
+   * Mongo.
+   */
+  @PostConstruct
+  public void initDB() throws UnknownHostException {
+    initDB("musicsDB", false);
+  }
+
+  /**
+   * Inicializa os objetos do MongoDB.
+   * @param dbName Nome do banco sendo acessado.
+   * @param drop true se o banco deve ser limpo na inicialização.
+   * @throws UnknownHostException Caso não seja possível se conectar ao
+   * Mongo.
+   */
+  protected void initDB(String dbName, boolean drop)
+      throws UnknownHostException
+  {
+    Mongo m = new Mongo();
+
+    if (drop) {
+      m.dropDatabase(dbName);
+    }
+    db = m.getDB(dbName);
+
+    // tenta obter a coleção - se não conseguir cria 
+    musicsColl = db.getCollection("musics");
+    if (musicsColl == null) {
+      musicsColl = db.createCollection("musics", null);
     }
 
-	/**
-	 * Inicializa os objetos do MongoDB.
-	 * @param dbName Nome do banco sendo acessado.
-	 * @param drop true se o banco deve ser limpo na inicialização.
-	 * @throws UnknownHostException Caso não seja possível se conectar ao
-	 * Mongo.
-	 */
-	protected void initDB(String dbName, boolean drop)
-			throws UnknownHostException {
-        Mongo m = new Mongo();
+    usersColl = db.getCollection("users");
+    if (usersColl == null) {
+      usersColl = db.createCollection("users", null);
+    }
 
-        if (drop) {
-        	m.dropDatabase(dbName);
-        }
-        db = m.getDB(dbName);
+    musicsFS = new GridFS(this.db, "musics");
+  }
 
-        musicsColl = db.getCollection("musics");
-        if (musicsColl == null) {
-            musicsColl = db.createCollection("musics", null);
-        }
-        
-        usersColl = db.getCollection("users");
-        if (usersColl == null) {
-        	usersColl = db.createCollection("users", null);
-        }		
-        
-        musicsFS = new GridFS(this.db, "musics");
-	}
-	
+  /**
+   * Produz objeto que representa o banco de dados do Mongo.
+   * @return objeto que representa o banco de dados do Mongo.
+   */
+  @Produces
+  public DB getDataBase() {
+    return db;
+  }
 
-	/**
-	 * Produz objeto que representa o banco de dados do Mongo.
-	 * @return objeto que representa o banco de dados do Mongo.
-	 */
-	@Produces
-	public DB getDataBase() {
-		return db;
-	}	
-	
-	/**
-	 * Produz instânca do GridFS para manipulação de arquivos. 
-	 * @return Instânca do GridFS para manipulação de arquivos. 
-	 */
-	@Produces
-	public GridFS getMusicGridFS() {
-		return this.musicsFS;
-	}
-	
-	/**
-	 * Produz objeto que representa a coleção de músicas.
-	 * @return objeto que representa a coleção de músicas.
-	 */
-	@Produces @MusicCollection
-	public DBCollection getMusicCollection() {
-		return this.musicsColl;
-	}
-	
-	/**
-	 * Produz objeto que representa a coleção de usuários.
-	 * @return objeto que representa a coleção de usuários.
-	 */
-	@Produces @UserCollection
-	public DBCollection getUserCollection() {
-		return this.usersColl;
-	}
+  /**
+   * Produz instânca do GridFS para manipulação de arquivos. 
+   * @return Instânca do GridFS para manipulação de arquivos. 
+   */
+  @Produces
+  public GridFS getMusicGridFS() {
+    return this.musicsFS;
+  }
+
+  /**
+   * Produz objeto que representa a coleção de músicas.
+   * @return objeto que representa a coleção de músicas.
+   */
+  @Produces @MusicCollection
+  public DBCollection getMusicCollection() {
+    return this.musicsColl;
+  }
+
+  /**
+   * Produz objeto que representa a coleção de usuários.
+   * @return objeto que representa a coleção de usuários.
+   */
+  @Produces
+  @UserCollection
+  public DBCollection getUserCollection() {
+    return this.usersColl;
+  }
 
 }

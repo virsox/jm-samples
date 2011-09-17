@@ -62,7 +62,7 @@ public class UsuarioServiceTest {
 		playlist.addMusic(music3);
         user.addPlaylist(playlist);
 		
-		userService.addPlaylist(user, playlist);
+		userService.update(user); //, playlist);
 		userService.play(user, music1);
 		userService.play(user, music1);
 		userService.play(user, music2);
