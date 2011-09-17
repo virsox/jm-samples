@@ -40,9 +40,9 @@ public class MusicIndexerImpl implements MusicIndexer {
 	/** Log */
 	private Logger log = Logger.getLogger("br.com.jm.musiclib.indexer");
 	
-	/** Lista com os listeners a serem invocados */
+	/** Evento injetado pelo container. */
 	@Inject
-	Event<MusicIndexerEvent> events;
+	Event<MusicIndexerEvent> event;
 
 	/*
 	 * (non-Javadoc)
@@ -64,7 +64,7 @@ public class MusicIndexerImpl implements MusicIndexer {
 	public void createIndex(File root) {
 		doCreateIndex(root);
 		log.info("Indexação finalizada. Pasta: '"+root+"'");
-		events.fire(new MusicIndexerEvent(null, true));
+		event.fire(new MusicIndexerEvent(null, true));
 	}
 
 	/**
@@ -114,7 +114,7 @@ public class MusicIndexerImpl implements MusicIndexer {
 				info.addTag(tag.getFirst(FieldKey.GENRE));
 
 				// Disparar o evento
-				events.fire(new MusicIndexerEvent(info));
+				event.fire(new MusicIndexerEvent(info));
 
 			}
 		}

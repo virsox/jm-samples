@@ -2,8 +2,8 @@ package br.com.jm.musiclib.indexer.impl;
 
 import java.util.logging.Logger;
 
-import javax.ejb.EJB;
 import javax.ejb.MessageDriven;
+import javax.inject.Inject;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
@@ -12,7 +12,7 @@ import javax.jms.TextMessage;
 import br.com.jm.musiclib.indexer.MusicIndexer;
 
 /**
- * Message-Driven Bean implementation class for: MusicIndexerMessageBean
+ * Message-Driven Bean que inicia o processo de indexação.
  * 
  */
 @MessageDriven(mappedName = "queue/musicIndexerQueue")
@@ -21,7 +21,7 @@ public class MusicIndexerMessageBean implements MessageListener {
 	private Logger log = Logger.getLogger("br.com.jm.musiclib.indexer");
 
 	/** MusicIndexer injetado pelo container. */
-	@EJB
+	@Inject
 	private MusicIndexer indexer;
 
 	/**
