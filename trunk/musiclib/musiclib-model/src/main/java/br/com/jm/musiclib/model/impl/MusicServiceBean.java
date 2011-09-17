@@ -103,7 +103,6 @@ public class MusicServiceBean implements MusicService {
 	/** {@inheritDoc} */
 	@Override
 	public void addComment(Music music, Comment comment) {
-		music.addComment(comment);
 		DBObject key = new BasicDBObject("_id", new ObjectId(music.getId()));
 		DBObject update = new BasicDBObject("$push", new BasicDBObject(
 				"comments", commentConv.toDBObject(comment)));
