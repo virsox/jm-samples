@@ -12,24 +12,29 @@
 </h:head>
 <h:body>
 	<ml:menu id="menu" />
+	
+    
+    	
 	<h:form>
-		<h:selectOneMenu value="#{player.selectedPlaylist}"
-			valueChangeListener="#{player.selectPlaylist}">
+		<h:selectOneMenu value="#{player.selectedPlaylist}">
 			<f:selectItem itemLabel="-" />
 			<f:selectItems value="#{userBean.currentUser.playlists}"
 				var="playlist" itemValue="#{playlist.name}"
 				itemLabel="#{playlist.name}" />
 
 		</h:selectOneMenu>
-		<h:commandButton value="Selecionar" />
+		<h:commandButton value="Selecionar" action="#{player.selectPlaylist}" />
 
 		<hr />
+
+            		
 		<p:panel id="playerPanel"
 			header="Agora tocando #{player.currentPlaylist.name}"
 			rendered="#{not empty player.selectedPlaylist}">
 
-			<p:media value="#{player.media}" player="quicktime" width="400"
-				height="100" />
+
+
+            <p:media value="#{player.media}" width="400" height="80" player="quicktime" />
 			<br />
 			<h:commandButton action="#{player.previous}" value="Anterior" image="previous.png"/>
 			<h:commandButton action="#{player.next}" value="Próxima" image="next.png"/>

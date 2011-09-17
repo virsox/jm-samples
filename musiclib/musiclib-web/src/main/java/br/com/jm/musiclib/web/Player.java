@@ -25,6 +25,7 @@ import br.com.jm.musiclib.model.Music;
 import br.com.jm.musiclib.model.MusicFile;
 import br.com.jm.musiclib.model.MusicService;
 import br.com.jm.musiclib.model.Playlist;
+import br.com.jm.musiclib.model.UserService;
 
 /**
  * Bean responsável por gerenciar o Player.
@@ -44,9 +45,12 @@ public class Player implements Serializable {
 	/**
 	 * EJB MusicService injetado pelo container.
 	 */
-	@EJB
+	@Inject
 	private MusicService musicService;
 
+	@Inject
+	private UserService userService;
+	
 	/**
 	 * UserBean injetado pelo container.
 	 */
@@ -93,31 +97,14 @@ public class Player implements Serializable {
 	 */
 	public void setSelectedPlaylist(String playlist) {
 		this.selectedPlaylist = playlist;
+	
 	}
 
 	/**
 	 * @return a playlist selecionada
 	 */
 	public Playlist getCurrentPlaylist() {
-		if (selectedPlaylist != null) {
-			for (Playlist playlist : user.getCurrentUser().getPlaylists()) {
-				if (playlist.getName().equals(this.selectedPlaylist)) {
-					this.currentPlaylist = playlist;
-					break;
-				}
-			}
-		}
 		return this.currentPlaylist;
-	}
-
-	/**
-	 * Altera a playlist selecionada
-	 * 
-	 * @param playlist
-	 */
-	public void setCurrentPlaylist(Playlist playlist) {
-		this.currentPlaylist = playlist;
-		this.musics = null;
 	}
 
 	/**
@@ -135,14 +122,8 @@ public class Player implements Serializable {
 	 * 
 	 */
 	public List<Music> getMusics() {
-		if (currentPlaylist == null) {
+		if (selectedPlaylist == null) {
 			return Collections.emptyList();
-		}
-		if (musics == null) {
-			musics = new ArrayList<Music>();
-			for (String musicId : currentPlaylist.getMusics()) {
-				musics.add(musicService.getMusic(musicId));
-			}
 		}
 		return musics;
 	}
@@ -152,6 +133,21 @@ public class Player implements Serializable {
 	 */
 	public void selectPlaylist() {
 		currentIndex = 0;
+	
+		if (selectedPlaylist != null) {
+			for (Playlist p : user.getCurrentUser().getPlaylists()) {
+				if (p.getName().equals(this.selectedPlaylist)) {
+					this.currentPlaylist = p;
+					break;
+				}
+			}
+			
+			musics = new ArrayList<Music>();
+			for (String musicId : currentPlaylist.getMusics()) {
+				musics.add(musicService.getMusic(musicId));
+			}
+			updateCurrentMusic();
+		}	
 	}
 
 	/**
@@ -162,6 +158,7 @@ public class Player implements Serializable {
 		if (currentIndex < 0) {
 			currentIndex = getMusics().size() - 1;
 		}
+		updateCurrentMusic();
 	}
 
 	/**
@@ -172,8 +169,17 @@ public class Player implements Serializable {
 		if (currentIndex >= getMusics().size()) {
 			currentIndex = 0;
 		}
+		updateCurrentMusic();
 	}
-
+	
+	private void updateCurrentMusic() {
+		// Obtém a música correspondente ao objeto atual
+		currentMusic = musics.get(currentIndex);
+					
+		// incrementa o numer de execuções
+		userService.play(user.getCurrentUser(), currentMusic);
+	}
+	
 	/**
 	 * 
 	 * @return a música selecionada como Stream de áudio mp3 para ser executado.
@@ -182,24 +188,16 @@ public class Player implements Serializable {
 	 */
 	public StreamedContent getMedia() {
 		// Verificar se a lista de músicas não está vazia
-		if (!getMusics().isEmpty()) {
+		if (!musics.isEmpty()) {
 			StreamedContent media;
-			InputStream inputStream;
 			MusicFile file;
 
-			// Obtém a música correspondente ao objeto atual
-			currentMusic = musics.get(currentIndex);
 			// Obtém o arquivo
 			file = musicService.getMusicFile(currentMusic.getFileId());
-			// Cria o input stream
-			inputStream = new BufferedInputStream(file.getInputStream());
+			
 			// Cria um objeto StreamedContent do tipo audio/mp3
-			media = new DefaultStreamedContent(inputStream, "audio/mp3");
-
-			// Verifica se estourou o índice da lista
-			if (currentIndex >= getMusics().size()) {
-				currentIndex = 0;
-			}
+			media = new DefaultStreamedContent(file.getInputStream(),
+					"audio/mp3", file.getFileName());
 
 			return media;
 		}
@@ -214,6 +212,7 @@ public class Player implements Serializable {
 	public void saveComment() {
 		comment.setUserName(user.getCurrentUser().getName());
 		comment.setPostDate(new Date());
+		currentMusic.addComment(comment);
 
 		musicService.addComment(currentMusic, comment);
 		comment = new Comment();

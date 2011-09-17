@@ -9,7 +9,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
-import br.com.jm.musiclib.indexer.StatusBean;
+import br.com.jm.musiclib.web.StatusBean;
 
 /**
  * Bean responsável por monitorar o andamento da indexação e atualizar o status
