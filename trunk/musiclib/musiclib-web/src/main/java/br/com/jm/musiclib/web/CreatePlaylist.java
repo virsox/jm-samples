@@ -4,19 +4,19 @@
  */
 package br.com.jm.musiclib.web;
 
-import br.com.jm.musiclib.model.Music;
-import br.com.jm.musiclib.model.MusicService;
-import br.com.jm.musiclib.model.Playlist;
-import br.com.jm.musiclib.model.UserService;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import javax.ejb.EJB;
+
 import javax.enterprise.context.Conversation;
 import javax.enterprise.context.ConversationScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+
+import br.com.jm.musiclib.model.Music;
+import br.com.jm.musiclib.model.MusicService;
+import br.com.jm.musiclib.model.Playlist;
+import br.com.jm.musiclib.model.UserService;
 
 /**
  * Bean responsável por criar a playlist.
@@ -36,13 +36,13 @@ public class CreatePlaylist implements Serializable {
 	/**
 	 * EJB UserService injetado pelo container.
 	 */
-	@EJB
+	@Inject
 	private UserService userService;
 
 	/**
 	 * EJB MusicService injetado pelo container.
 	 */
-	@EJB
+	@Inject
 	private MusicService musicService;
 
 	/**
@@ -96,7 +96,7 @@ public class CreatePlaylist implements Serializable {
 
 		user.getCurrentUser().addPlaylist(p);
 
-		userService.addPlaylist(user.getCurrentUser(), p);
+		userService.update(user.getCurrentUser()); //, p);
 		conv.end();
 
 		return "main.xhtml";
