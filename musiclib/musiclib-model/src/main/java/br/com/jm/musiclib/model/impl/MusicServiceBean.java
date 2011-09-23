@@ -39,168 +39,148 @@ import com.mongodb.gridfs.GridFSInputFile;
 @Local(MusicService.class)
 public class MusicServiceBean implements MusicService {
 
-	/** Log */
-	private Logger log = Logger.getLogger("br.com.jm.musiclib.model");
+  /** Log */
+  private Logger log = Logger.getLogger("br.com.jm.musiclib.model");
 
-	/** Instância do GridFS. */
-	@Inject
-	protected GridFS musicsGridFS;
-	
-	/** Coleção de músicas. */
-	@Inject @MusicCollection
-	protected DBCollection musicsColl;
-	
-	/** Conversos de objetos Music. */
-	@Inject
-	protected Converter<Music> musicConv;
-	
-	/** Conversos de objetos Comment. */
-	@Inject
-	protected Converter<Comment> commentConv;
-	
-	/** Conversos de objetos MusicFile. */
-	@Inject
-	protected Converter<MusicFile> musicFileConv;
+  /** Instância do GridFS. */
+  @Inject
+  protected GridFS musicsGridFS;
 
-	/** {@inheritDoc} */
-	@Override
-	public Music getMusic(String musicId) {
-		DBObject doc = this.musicsColl.findOne(new ObjectId(musicId));
-		return musicConv.toObject(doc);
-	}
+  /** Coleção de músicas. */
+  @Inject
+  @MusicCollection
+  protected DBCollection musicsColl;
 
-	/** {@inheritDoc} */
-	@Override
-	public List<Music> searchMusics(String search) {
-		DBObject titleQueryDoc = new BasicDBObject();
+  /** Conversor de objetos Music. */
+  @Inject
+  protected Converter<Music> musicConv;
 
-		// constrói a expressão regular e a utiliza como valor para title
-		Pattern searchPattern = Pattern.compile(".*" + search + ".*",
-				Pattern.CASE_INSENSITIVE);
-		titleQueryDoc.put("title", searchPattern);
+  /** Conversor de objetos Comment. */
+  @Inject
+  protected Converter<Comment> commentConv;
 
-		List<Music> musics = new ArrayList<Music>();
+  /** Conversor de objetos MusicFile. */
+  @Inject
+  protected Converter<MusicFile> musicFileConv;
 
-		DBCursor cursor = this.musicsColl.find(titleQueryDoc);
-		while (cursor.hasNext()) {
-			DBObject currentDoc = cursor.next();
-			musics.add(musicConv.toObject(currentDoc));
-		}
+  /** {@inheritDoc} */
+  @Override
+  public Music getMusic(String musicId) {
+    DBObject doc = this.musicsColl.findOne(new ObjectId(musicId));
+    return musicConv.toObject(doc);
+  }
 
-		return musics;
-	}
+  /** {@inheritDoc} */
+  @Override
+  public List<Music> searchMusics(String search) {
+    DBObject titleQueryDoc = new BasicDBObject();
 
-	/** {@inheritDoc} */
-	@Override
-	public void addTag(Music music, String tag) {
-		DBObject key = new BasicDBObject("_id", new ObjectId(music.getId()));
-		DBObject update = new BasicDBObject("$push", new BasicDBObject("tags",
-				tag));
+    // constrói a expressão regular e a utiliza como valor para title
+    Pattern searchPattern = Pattern.compile(".*" + search + ".*",
+        Pattern.CASE_INSENSITIVE);
+    titleQueryDoc.put("title", searchPattern);
 
-		this.musicsColl.update(key, update);
-	}
+    List<Music> musics = new ArrayList<Music>();
 
-	/** {@inheritDoc} */
-	@Override
-	public void addComment(Music music, Comment comment) {
-		DBObject key = new BasicDBObject("_id", new ObjectId(music.getId()));
-		DBObject update = new BasicDBObject("$push", new BasicDBObject(
-				"comments", commentConv.toDBObject(comment)));
+    DBCursor cursor = this.musicsColl.find(titleQueryDoc);
+    while (cursor.hasNext()) {
+      DBObject currentDoc = cursor.next();
+      musics.add(musicConv.toObject(currentDoc));
+    }
 
-		this.musicsColl.update(key, update);
+    return musics;
+  }
 
-	}
-	
-	/** {@inheritDoc} */
-	@Override
-	public MusicFile getMusicFile(String musicFileId) {
-		DBObject obj = this.musicsGridFS.find(new ObjectId(musicFileId));				
-		return musicFileConv.toObject(obj);
-	}
+  /** {@inheritDoc} */
+  @Override
+  public void addTag(Music music, String tag) {
+    DBObject key = new BasicDBObject("_id", new ObjectId(music.getId()));
+    DBObject update = new BasicDBObject("$push", new BasicDBObject("tags", tag));
 
-	/** {@inheritDoc} */
-	@Override
-	public Music processIndexerEvent(@Observes MusicIndexerEvent event) {
-		if (!event.getCompleted()) { // não terminou ainda o processamento
-			
-			MusicInfo info = event.getMusicInfo();
-			log.fine("Processando[" + info.getFileName() + "]");
-			
-			// Cria arquivo no GridFS
-			String fileId = createFile(info.getFileName());
+    this.musicsColl.update(key, update);
+  }
 
-			String genre = info.getTags().size() > 0 ?
-					info.getTags().get(0) :
-					null;
-					
-			Integer trackId;
-			try {
-				trackId = Integer.parseInt(info.getTrackNumber());
-			} catch (NumberFormatException ex) {
-				trackId = 0;
-			}
+  /** {@inheritDoc} */
+  @Override
+  public void addComment(Music music, Comment comment) {
+    DBObject key = new BasicDBObject("_id", new ObjectId(music.getId()));
+    DBObject update = new BasicDBObject("$push", new BasicDBObject("comments",
+        commentConv.toDBObject(comment)));
 
-			// cria música
-			Music music = new Music(trackId, info.getTitle(), info.getArtist(),
-					info.getAlbum(), fileId, genre);
-			music.setId(this.createMusic(music));
-			
-			return music;
-		}
-		return null;
+    this.musicsColl.update(key, update);
 
-	}
+  }
 
-	/** 
-	 * Persiste música no MongoDB.
-	 * @param music Música a ser persistida.
-	 * @return Identificador do objeto criado pelo MongoDB.
-	 */
-	protected String createMusic(Music music) {
+  /** {@inheritDoc} */
+  @Override
+  public MusicFile getMusicFile(String musicFileId) {
+    DBObject obj = this.musicsGridFS.find(new ObjectId(musicFileId));
+    return musicFileConv.toObject(obj);
+  }
 
-		DBObject doc = musicConv.toDBObject(music);
+  /** {@inheritDoc} */
+  @Override
+  public Music processIndexerEvent(@Observes MusicIndexerEvent event) {
+    if (!event.getCompleted()) { // não terminou ainda o processamento
 
-		WriteResult result = this.musicsColl.insert(doc);
-		if (result.getError() != null) {
-			throw new RuntimeException("Erro na inserção da Música");
-		}
+      MusicInfo info = event.getMusicInfo();
+      log.fine("Processando[" + info.getFileName() + "]");
 
-		ObjectId id = (ObjectId) doc.get("_id");
-		music.setId(id.toString());
-		return music.getId();
-	}
+      // Cria arquivo no GridFS
+      String fileId = createFile(info.getFileName());
 
-	/**
-	 * Persiste o arquivo no banco de dados.
-	 * @param fileName Caminho completo do arquivo a ser persistido.
-	 * @return 
-	 */
-	protected String createFile(String fileName) {		
-		try {
-			GridFSInputFile input = musicsGridFS.createFile(new File(fileName));
-			input.save();
-			return ((ObjectId) input.getId()).toString();
+      String genre = info.getTags().size() > 0 ? info.getTags().get(0) : null;
 
-		} catch (IOException ex) {
-			throw new RuntimeException("Erro na persistência do arquivo");
-		}
-	}
+      Integer trackId;
+      try {
+        trackId = Integer.parseInt(info.getTrackNumber());
+      } catch (NumberFormatException ex) {
+        trackId = 0;
+      }
 
-//	/**
-//	 * Configura objeto que representa a coleção de músicas.
-//	 * @param musicsColl objeto que representa a coleção de músicas.
-//	 */
-//	public void setMusicCollection(DBCollection musicsColl) {
-//		this.musicsColl = musicsColl;
-//	}
-//
-//	/**
-//	 * Configura instância do GridFS. 
-//	 * @param gridFS Instância do GridFS a ser configurada.
-//	 */
-//	public void setGridFS(GridFS gridFS) {
-//		this.musicsGridFS = gridFS;
-//	}
-//	
-	
+      // cria música
+      Music music = new Music(trackId, info.getTitle(), info.getArtist(),
+          info.getAlbum(), fileId, genre);
+      music.setId(this.createMusic(music));
+
+      return music;
+    }
+    return null;
+
+  }
+
+  /** 
+   * Persiste música no MongoDB.
+   * @param music Música a ser persistida.
+   * @return Identificador do objeto criado pelo MongoDB.
+   */
+  protected String createMusic(Music music) {
+
+    DBObject doc = musicConv.toDBObject(music);
+
+    WriteResult result = this.musicsColl.insert(doc);
+    if (result.getError() != null) { throw new RuntimeException(
+        "Erro na inserção da Música"); }
+
+    ObjectId id = (ObjectId) doc.get("_id");
+    music.setId(id.toString());
+    return music.getId();
+  }
+
+  /**
+   * Persiste o arquivo no banco de dados.
+   * @param fileName Caminho completo do arquivo a ser persistido.
+   * @return 
+   */
+  protected String createFile(String fileName) {
+    try {
+      GridFSInputFile input = musicsGridFS.createFile(new File(fileName));
+      input.save();
+      return ((ObjectId) input.getId()).toString();
+
+    } catch (IOException ex) {
+      throw new RuntimeException("Erro na persistência do arquivo");
+    }
+  }
+
 }
