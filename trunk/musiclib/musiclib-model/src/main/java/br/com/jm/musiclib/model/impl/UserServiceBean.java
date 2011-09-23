@@ -61,7 +61,7 @@ public class UserServiceBean implements UserService {
 
   /** {@inheritDoc} */
   @Override
-  public void update(User user) {//, Playlist playlist) {
+  public void update(User user) {
 
     DBObject key = new BasicDBObject("_id", new ObjectId(user.getId()));
     this.userColl.update(key, userConv.toDBObject(user));

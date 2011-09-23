@@ -14,22 +14,21 @@ import br.com.jm.musiclib.model.MusicFile;
 @ApplicationScoped
 public class MusicFileConverter implements Converter<MusicFile> {
 
-	/** {@inheritDoc} */
-	@Override
-	public DBObject toDBObject(MusicFile musicFile) {
-		throw new UnsupportedOperationException("Operação não suportada!");
-	}
+  /** {@inheritDoc} */
+  @Override
+  public DBObject toDBObject(MusicFile musicFile) {
+    throw new UnsupportedOperationException("Operação não suportada!");
+  }
 
-	/** {@inheritDoc} */
-	@Override
-	public MusicFile toObject(DBObject doc) {
-		
-		GridFSDBFile dbFile = (GridFSDBFile) doc;
-		MusicFile musicFile = new MusicFile(
-				(String) dbFile.get("filename"),
-				dbFile.getInputStream());
-				
-		return musicFile;
-	}
+  /** {@inheritDoc} */
+  @Override
+  public MusicFile toObject(DBObject doc) {
+
+    GridFSDBFile dbFile = (GridFSDBFile) doc;
+    MusicFile musicFile = new MusicFile((String) dbFile.get("filename"),
+        dbFile.getInputStream());
+
+    return musicFile;
+  }
 
 }
