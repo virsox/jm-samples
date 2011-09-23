@@ -21,50 +21,47 @@ import br.com.jm.musiclib.web.Player;
  */
 @WebServlet(name = "Player", urlPatterns = { "/Player" })
 public class PlayerServlet extends HttpServlet {
-        private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-        @Inject
-        private Player player;
+  @Inject
+  private Player player;
 
-        @Inject
-        private MusicService musicService;
+  @Inject
+  private MusicService musicService;
 
+  /**
+   * Construtor padrão.
+   * @see HttpServlet#HttpServlet()
+   */
+  public PlayerServlet() {
+    super();
+  }
 
-        /**
-         * Construtor padrão.
-         * @see HttpServlet#HttpServlet()
-         */
-        public PlayerServlet() {
-                super();
-        }
+  /**
+   * Método GET que irá devolver o stream de bytes para o browser.
+   * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+   *      response)
+   */
+  protected void doGet(HttpServletRequest request, HttpServletResponse response)
+      throws ServletException, IOException {
+    // Obtem a musica atual do servlet
+    Music music = player.getCurrentMusic();
+    // Pega os bytes da música
+    MusicFile file = musicService.getMusicFile(music.getFileId());
+    // Informa que estamos mandando um audio/mp3
+    response.setContentType("audio/mp3");
+    if (music != null) {
+      // obtem o output stream e devolve para o browser
+      OutputStream out = response.getOutputStream();
+      BufferedInputStream in = new BufferedInputStream(file.getInputStream());
+      int b;
+      while ((b = in.read()) != -1) {
+        out.write(b);
+      }
 
-        /**
-         * Método GET que irá devolver o stream de bytes para o browser.
-         * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
-         *      response)
-         */
-        protected void doGet(HttpServletRequest request,
-                        HttpServletResponse response) throws ServletException, IOException {
-        		// Obtem a musica atual do servlet
-                Music music = player.getCurrentMusic();
-                // Pega os bytes da música
-                MusicFile file = musicService.getMusicFile(music.getFileId());
-                // Informa que estamos mandando um audio/mp3
-                response.setContentType("audio/mp3");
-                if (music != null) {
-                		// obtem o output stream e devolve para o browser
-                        OutputStream out = response.getOutputStream();
-                        BufferedInputStream in = new BufferedInputStream(
-                                        file.getInputStream());
-                        int b;
-                        while ((b = in.read()) != -1) {
-                                out.write(b);
-                        }
-
-                        in.close();
-                        out.close();
-                }
-
-        }
+      in.close();
+      out.close();
+    }
+  }
 
 }
