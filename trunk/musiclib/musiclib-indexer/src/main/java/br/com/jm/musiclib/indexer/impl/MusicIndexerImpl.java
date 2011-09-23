@@ -24,100 +24,99 @@ import br.com.jm.musiclib.indexer.MusicInfo;
  * extraídas, listeners cadastrados são invocados para poder exibir ou salvar as
  * informações.
  * 
- *  Para ser informado sobre os eventos 
- *  
- *  <code>
+ * Para ser informado sobre os eventos
+ * 
+ * <code>
  	public void process(@Observes MusicIndexerEvent event) {
 		System.out.println(event.getMusicInfo().getTitle());
 	}
  * </code>
+ * 
  * @see MusicInfo
  * @see MusicIndexerEvent
  */
 @Named
 @Stateless
 public class MusicIndexerImpl implements MusicIndexer {
-	/** Log */
-	private Logger log = Logger.getLogger("br.com.jm.musiclib.indexer");
-	
-	/** Evento injetado pelo container. */
-	@Inject
-	Event<MusicIndexerEvent> event;
+  /** Log */
+  private Logger log = Logger.getLogger("br.com.jm.musiclib.indexer");
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * br.com.jm.musiclib.indexer.MusicIndexer#createIndex(java.lang.String)
-	 */
-	@Override
-	public void createIndex(String root) {
-		createIndex(new File(root));
-	}
+  /** Evento injetado pelo container. */
+  @Inject
+  Event<MusicIndexerEvent> event;
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see br.com.jm.musiclib.indexer.MusicIndexer#createIndex(java.io.File)
-	 */
-	@Override
-	public void createIndex(File root) {
-		doCreateIndex(root);
-		log.info("Indexação finalizada. Pasta: '"+root+"'");
-		event.fire(new MusicIndexerEvent(null, true));
-	}
+  /*
+   * (non-Javadoc)
+   * 
+   * @see
+   * br.com.jm.musiclib.indexer.MusicIndexer#createIndex(java.lang.String)
+   */
+  @Override
+  public void createIndex(String root) {
+    createIndex(new File(root));
+  }
 
-	/**
-	 * Método recursivo que vasculha pastas e sub-pastas em busca de arquivos
-	 * mp3
-	 * 
-	 * @param root
-	 *            A pasta raiz para procurar os arquivos.
-	 */
-	private void doCreateIndex(File root) {
-		MP3File f;
-		FileFilter filter = new FileFilter() {
-			public boolean accept(File pathname) {
-				
-				return ((pathname.isDirectory()) &&
-							(!pathname.getName().equals(".")) &&
-							(!pathname.getName().equals("..")))
-						|| pathname.getName().endsWith(".mp3");
-			}
-		};
+  /*
+   * (non-Javadoc)
+   * 
+   * @see br.com.jm.musiclib.indexer.MusicIndexer#createIndex(java.io.File)
+   */
+  @Override
+  public void createIndex(File root) {
+    doCreateIndex(root);
+    log.info("Indexação finalizada. Pasta: '" + root + "'");
+    event.fire(new MusicIndexerEvent(null, true));
+  }
 
-		for (File file : root.listFiles(filter)) {
+  /**
+   * Método recursivo que vasculha pastas e sub-pastas em busca de arquivos
+   * mp3
+   * 
+   * @param root
+   *            A pasta raiz para procurar os arquivos.
+   */
+  private void doCreateIndex(File root) {
+    MP3File f;
+    FileFilter filter = new FileFilter() {
+      public boolean accept(File pathname) {
 
-			if (file.isDirectory()) {
-				doCreateIndex(file);
-			} else {
-				try {
-					f = (MP3File) AudioFileIO.read(file);
-				} catch (Exception e) {
-					log.throwing("MusicIndexerImpl", "doCreateIndex", e);
-					continue;
-				}
-				
-				MusicInfo info = new MusicInfo();
-				info.setFileName(file.getAbsolutePath());
-				
-				Tag tag = f.getTag();
-				
-				info.setAlbum(tag.getFirst(FieldKey.ALBUM));
-				info.setArtist(tag.getFirst(FieldKey.ARTIST));
-				info.setTitle(tag.getFirst(FieldKey.TITLE));
-				try {
-					info.setTrackNumber(tag.getFirst(FieldKey.TRACK));
-				} catch (Throwable e) {
-					info.setTrackNumber("");
-				}
-				info.addTag(tag.getFirst(FieldKey.GENRE));
+        return ((pathname.isDirectory()) && (!pathname.getName().equals(".")) && (!pathname
+            .getName().equals(".."))) || pathname.getName().endsWith(".mp3");
+      }
+    };
 
-				// Disparar o evento
-				event.fire(new MusicIndexerEvent(info));
+    for (File file : root.listFiles(filter)) {
 
-			}
-		}
+      if (file.isDirectory()) {
+        doCreateIndex(file);
+      } else {
+        try {
+          f = (MP3File) AudioFileIO.read(file);
+        } catch (Exception e) {
+          log.throwing("MusicIndexerImpl", "doCreateIndex", e);
+          continue;
+        }
 
-	}
+        MusicInfo info = new MusicInfo();
+        info.setFileName(file.getAbsolutePath());
+
+        Tag tag = f.getTag();
+
+        info.setAlbum(tag.getFirst(FieldKey.ALBUM));
+        info.setArtist(tag.getFirst(FieldKey.ARTIST));
+        info.setTitle(tag.getFirst(FieldKey.TITLE));
+        try {
+          info.setTrackNumber(tag.getFirst(FieldKey.TRACK));
+        } catch (Throwable e) {
+          info.setTrackNumber("");
+        }
+        info.addTag(tag.getFirst(FieldKey.GENRE));
+
+        // Disparar o evento
+        event.fire(new MusicIndexerEvent(info));
+
+      }
+    }
+
+  }
 }
