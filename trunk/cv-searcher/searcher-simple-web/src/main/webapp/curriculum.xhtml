@@ -1,0 +1,44 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>Title</title>
+</h:head>
+
+<h:body>
+    <p:messages id="msgs" showDetail="false" />
+    
+    <h:form>
+        <h:panelGrid columns="2">
+            <h:outputText value="Nome:" />
+            <h:inputText value="#{curriculumBean.name}" id="name"
+                label="Nome" required="true" />
+
+            <h:outputText value="Email:" />
+            <h:inputText value="#{curriculumBean.email}" id="email"
+                label="Email" required="true" />
+                
+            <h:outputText value="Descrição:" />
+            <h:inputTextarea value="#{curriculumBean.description}" id="description"
+                label="Descrição" required="true"
+                rows="15" cols="50"/>            
+                
+        </h:panelGrid>
+        
+        <p:commandButton action="#{curriculumBean.create}" value="Criar"
+            ajax="false" update="msgs" />
+                    
+    </h:form>
+
+</h:body>
+
+</html>
