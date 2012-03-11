@@ -84,7 +84,7 @@ public class IndexerBean {
 		StringBuilder builder = new StringBuilder();
 		String s = null;
 		while ((s = reader.readLine()) != null) {
-			builder.append(s);
+			builder.append(s).append("\n");
 		}
 		
 		doc.add(new Field("description", builder.toString(), Store.NO, Index.ANALYZED));
