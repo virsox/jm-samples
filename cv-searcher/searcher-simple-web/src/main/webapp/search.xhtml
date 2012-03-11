@@ -1,0 +1,48 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>Title</title>
+</h:head>
+
+<h:body>
+
+    <h:form>
+        <h:panelGrid columns="2">
+            <h:inputText value="#{searchBean.keywords}" id="keywords"
+                label="Palavras Chave" required="true" />
+
+            <p:commandButton action="#{searchBean.search}" value="Buscar"
+                ajax="false" />                
+        </h:panelGrid>
+        
+	    <p:dataTable var="line" value="#{searchBean.result}"
+	        rows="10" rowsPerPageTemplate="5,10,15">
+	
+	        <p:column>
+	            <f:facet name="header">Nome</f:facet>
+	            <h:outputText value="#{line.name}" />
+	        </p:column>
+	
+	        <p:column>
+	            <f:facet name="header">Email</f:facet>
+	            <h:outputText value="#{line.email}" />
+	        </p:column>  
+	    </p:dataTable>          
+    </h:form>
+    
+  
+    
+
+</h:body>
+
+</html>
