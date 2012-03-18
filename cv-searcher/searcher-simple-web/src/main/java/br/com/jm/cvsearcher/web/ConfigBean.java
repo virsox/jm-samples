@@ -6,11 +6,11 @@ import javax.enterprise.context.ApplicationScoped;
 public class ConfigBean {
 
 	public String getFilesDirectory() {
-		return "/Users/virso/tmp/cv-searcher/files/";
+		return "c:/Temp/files/";
 	}
 	
 	public String getIndexDirectory() {
-		return "/Users/virso/tmp/cv-searcher/index/";
+		return "c:/Temp/index/";
 	}
 	
 }
