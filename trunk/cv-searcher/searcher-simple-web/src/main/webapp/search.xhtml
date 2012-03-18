@@ -12,9 +12,10 @@
 
 <h:body>
 	<ml:menu id="menu" />
-	<p:messages id="msgs" showDetail="false" />
 
 	<h:form>
+		<p:messages id="msgs" showDetail="true" />
+
 		<h:panelGrid columns="2">
 			<h:outputText value="Palavra chave:" />
 			<h:inputText value="#{searchBean.keyword}" id="keyword"
@@ -29,7 +30,7 @@
 		</h:panelGrid>
 
 		<p:commandButton action="#{searchBean.search}" value="Procurar"
-			ajax="true" update="results" />
+			ajax="true" update="results,msgs" />
 
 
 		<hr />
@@ -56,6 +57,12 @@
                     Content
             </f:facet>
 				<h:outputText value="#{cv.content}" />
+			</p:column>
+			<p:column>
+				<f:facet name="header">
+                    Score
+            </f:facet>
+				<h:outputText value="#{cv.score}" />
 			</p:column>
 
 		</p:dataTable>
