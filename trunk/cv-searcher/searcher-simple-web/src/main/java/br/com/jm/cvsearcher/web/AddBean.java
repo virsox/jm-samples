@@ -44,7 +44,7 @@ public class AddBean {
 	/**
 	 * Adiciona e indexa um novo currículo.
 	 * 
-	 * @return {@link Constants#VIEW} se o currículo foi adicionado corretamente
+	 * @return {@link Constants#MAIN} se o currículo foi adicionado corretamente
 	 *         ou {@link Constants#ADD_CV} caso ocorra algum erro
 	 */
 	public String addCurriculum() {
@@ -54,8 +54,8 @@ public class AddBean {
 		try {
 			// Chama o serviço para adicionar e indexar o currículo
 			service.addCurriculum(cv);
-			// Usuário será redirecionado para a página de visualização para ver o currículo
-			r = Constants.VIEW;
+			// Usuário será redirecionado para a página principal
+			r = Constants.MAIN;
 			// Adicionar uma mensagem de sucesso
 			context.addMessage(null, new FacesMessage(
 					FacesMessage.SEVERITY_INFO, "Sucesso",
