@@ -7,43 +7,67 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import br.com.jm.cvsearcher.model.Curriculum;
+import br.com.jm.cvsearcher.service.CurriculumException;
 import br.com.jm.cvsearcher.service.SearchService;
 import br.com.jm.cvsearcher.util.Constants;
 
+/**
+ * Bean CDI para adição de novos currículos.
+ * 
+ * @author Paulo Sigrist / Wilson A. Higashino
+ * 
+ */
 @RequestScoped
 @Named
 public class AddBean {
+	/** Currículo a ser adicionado. */
 	private Curriculum cv;
+
+	/** Bean de serviço. Injetado pelo container. */
 	@Inject
 	private SearchService service;
 
+	/**
+	 * Construtor padrão. Cria uma nova instância de Curriculum
+	 */
 	public AddBean() {
 		this.cv = new Curriculum();
 	}
 
+	/**
+	 * @return Retorna a instância de Curriculum
+	 */
 	public Curriculum getCv() {
 		return cv;
 	}
 
+	/**
+	 * Adiciona e indexa um novo currículo.
+	 * 
+	 * @return {@link Constants#VIEW} se o currículo foi adicionado corretamente
+	 *         ou {@link Constants#ADD_CV} caso ocorra algum erro
+	 */
 	public String addCurriculum() {
-		boolean b;
 		String r;
 		FacesContext context = FacesContext.getCurrentInstance();
 
-		b = service.addCurriculum(cv);
-
-		
-		if (b) {
-			r = Constants.MAIN;
+		try {
+			// Chama o serviço para adicionar e indexar o currículo
+			service.addCurriculum(cv);
+			// Usuário será redirecionado para a página de visualização para ver o currículo
+			r = Constants.VIEW;
+			// Adicionar uma mensagem de sucesso
 			context.addMessage(null, new FacesMessage(
 					FacesMessage.SEVERITY_INFO, "Sucesso",
 					"Currículo adicionado com sucesso."));
-		} else {
-			r = Constants.ADD_CV;
-			context.addMessage(null, new FacesMessage(
-					FacesMessage.SEVERITY_ERROR, "Erro",
-					"Erro ao adicionar currículo"));
 
+		} catch (CurriculumException e) {
+			// Algum erro aconteceu ao inserir o currículo.
+			// Redirecionar o usuario para a página de adição para outra tentativa
+			r = Constants.ADD_CV;
+			// Adicionar a mensagem de erro no contexto
+			context.addMessage(null, new FacesMessage(
+					FacesMessage.SEVERITY_ERROR, "Erro", e.getMessage()));
 		}
 
 		return r;
