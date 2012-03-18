@@ -13,8 +13,6 @@ public final class Constants {
 	public static final String ADD_CV = "addCv";
 	/** Caminho para a página de busca de currículo */
 	public static final String SEARCH = "search";
-	/** Caminho para a página de visualização de currículo */
-	public static final String VIEW = "view";
 
 	/** Campo nome para a indexação/busca */
 	public static final String FIELD_NAME = "name";
