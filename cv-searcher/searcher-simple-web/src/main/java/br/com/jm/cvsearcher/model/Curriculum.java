@@ -7,101 +7,85 @@ package br.com.jm.cvsearcher.model;
  * 
  */
 public class Curriculum {
-	/** Nome do candidato */
-	private String name;
-	/** Email do candidato */
-	private String email;
-	/** Conteúdo do currículo do candidato */
-	private String content;
-	// TODO Remover ?
-	private float score;
 
-	/**
-	 * Construtor padrão.
-	 */
-	public Curriculum() {
+  /** Nome do candidato */
+  private String name;
+  /** Email do candidato */
+  private String email;
+  /** Conteúdo do currículo do candidato */
+  private String content;
 
-	}
+  /**
+   * Construtor padrão.
+   */
+  public Curriculum() {
 
-	/**
-	 * Construtor completo. Inicializa as propriedades <tt>name</tt>,
-	 * <tt>email</tt> e <tt>content</tt>.
-	 * 
-	 * @param name
-	 *            Nome do candidato
-	 * @param email
-	 *            Email do candidato
-	 * @param content
-	 *            Conteúdo do currículo do candidato
-	 * 
-	 * @see #setName(String)
-	 * @see #setEmail(String)
-	 * @see #setContent(String)
-	 */
-	public Curriculum(String name, String email, String content) {
-		this.setName(name);
-		this.setEmail(email);
-		this.setContent(content);
-	}
+  }
 
-	/**
-	 * @return the name
-	 */
-	public String getName() {
-		return name;
-	}
+  /**
+   * Construtor completo. Inicializa as propriedades <tt>name</tt>,
+   * <tt>email</tt> e <tt>content</tt>.
+   * 
+   * @param name
+   *            Nome do candidato
+   * @param email
+   *            Email do candidato
+   * @param content
+   *            Conteúdo do currículo do candidato
+   * 
+   * @see #setName(String)
+   * @see #setEmail(String)
+   * @see #setContent(String)
+   */
+  public Curriculum(String name, String email, String content) {
+    this.setName(name);
+    this.setEmail(email);
+    this.setContent(content);
+  }
 
-	/**
-	 * @param name
-	 *            the name to set
-	 */
-	public void setName(String name) {
-		this.name = name;
-	}
+  /**
+   * @return the name
+   */
+  public String getName() {
+    return name;
+  }
 
-	/**
-	 * @return the email
-	 */
-	public String getEmail() {
-		return email;
-	}
+  /**
+   * @param name
+   *            the name to set
+   */
+  public void setName(String name) {
+    this.name = name;
+  }
 
-	/**
-	 * @param email
-	 *            the email to set
-	 */
-	public void setEmail(String email) {
-		this.email = email;
-	}
+  /**
+   * @return the email
+   */
+  public String getEmail() {
+    return email;
+  }
 
-	/**
-	 * @return the content
-	 */
-	public String getContent() {
-		return content;
-	}
+  /**
+   * @param email
+   *            the email to set
+   */
+  public void setEmail(String email) {
+    this.email = email;
+  }
 
-	/**
-	 * @param content
-	 *            the content to set
-	 */
-	public void setContent(String content) {
-		this.content = content;
-	}
+  /**
+   * @return the content
+   */
+  public String getContent() {
+    return content;
+  }
 
-	/**
-	 * @return the score
-	 */
-	public float getScore() {
-		return score;
-	}
-
-	/**
-	 * @param score
-	 *            the score to set
-	 */
-	public void setScore(float score) {
-		this.score = score;
-	}
+  /**
+   * @param content
+   *            the content to set
+   */
+  public void setContent(String content) {
+    this.content = content;
+  }
 
 }

@@ -4,13 +4,13 @@ import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
 
-import javax.enterprise.context.RequestScoped;
+import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import br.com.jm.cvsearcher.model.Curriculum;
+import br.com.jm.cvsearcher.model.SearchResult;
 import br.com.jm.cvsearcher.service.CurriculumException;
 import br.com.jm.cvsearcher.service.SearchService;
 
@@ -20,7 +20,7 @@ import br.com.jm.cvsearcher.service.SearchService;
  * 
  * 
  */
-@RequestScoped
+@SessionScoped
 @Named
 public class SearchBean implements Serializable {
 	/**
@@ -46,7 +46,7 @@ public class SearchBean implements Serializable {
 	/** Tipo de busca a ser feita */
 	private SearchType type;
 	/** Resultado da busca */
-	private List<Curriculum> results;
+	private List<SearchResult> results;
 
 	/**
 	 * Construtor padrão. Inicializa os atributos <tt>result</tt> como uma lista
@@ -139,7 +139,7 @@ public class SearchBean implements Serializable {
 	/**
 	 * @return the results
 	 */
-	public List<Curriculum> getResults() {
+	public List<SearchResult> getResults() {
 		return results;
 	}
 
