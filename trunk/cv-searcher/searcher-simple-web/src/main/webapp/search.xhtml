@@ -13,6 +13,7 @@
 <h:body>
 	<ml:menu id="menu" />
 
+    <h1>Buscar Currículo</h1> 
 	<h:form>
 		<p:messages id="msgs" showDetail="true" />
 
@@ -34,36 +35,48 @@
 
 
 		<hr />
-		<p:dataTable id="results" var="cv" value="#{searchBean.results}"
+		<p:dataTable id="results" var="result" value="#{searchBean.results}"
 			paginator="true" rows="10"
 			paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
 			rowsPerPageTemplate="5,10,15">
+			<p:column style="width:16px">  
+                <p:rowToggler />  
+            </p:column>  
+			
 			<p:column id="modelHeader">
 				<f:facet name="header">
                     Nome
-            </f:facet>
-				<h:outputText value="#{cv.name}" />
+                </f:facet>
+				<h:outputText value="#{result.curriculum.name}" />
 			</p:column>
 
 			<p:column>
 				<f:facet name="header">
                     Email
-            </f:facet>
-				<h:outputText value="#{cv.email}" />
+                </f:facet>
+				<h:outputText value="#{result.curriculum.email}" />
 			</p:column>
 
 			<p:column>
 				<f:facet name="header">
-                    Content
-            </f:facet>
-				<h:outputText value="#{cv.content}" />
-			</p:column>
-			<p:column>
-				<f:facet name="header">
                     Score
-            </f:facet>
-				<h:outputText value="#{cv.score}" />
+                </f:facet>
+				<h:outputText value="#{result.score}" />
 			</p:column>
+
+
+            <p:rowExpansion>
+                <h:panelGrid columns="1"  styleClass="ui-widget-content" style="font-size: 80%">
+                    <h:outputText value="#{result.curriculum.content}" />
+                </h:panelGrid>
+
+            </p:rowExpansion>
+            
+            <!--      <f:facet name="header">
+                    Content
+                </f:facet>
+
+            </p:column> -->
 
 		</p:dataTable>
 	</h:form>
