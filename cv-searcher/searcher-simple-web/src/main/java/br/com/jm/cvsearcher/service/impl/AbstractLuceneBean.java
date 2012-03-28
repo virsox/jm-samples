@@ -2,8 +2,10 @@ package br.com.jm.cvsearcher.service.impl;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -84,9 +86,9 @@ public class AbstractLuceneBean {
   protected Curriculum loadCurriculum(File file) throws IOException {
     // Cria uma instância de currículo
     Curriculum cv = new Curriculum();
-    // Cria um FileReader e um BufferedReader para ler o arquivo
-    FileReader fr = new FileReader(file);
-    BufferedReader reader = new BufferedReader(fr);
+    // Cria um FileInputStream e um BufferedReader para ler o arquivo
+    FileInputStream fr = new FileInputStream(file);
+    BufferedReader reader = new BufferedReader(new InputStreamReader(fr, "UTF-8"));
     // StringBuilder para carregar os dados do conteúdo
     StringBuilder builder = new StringBuilder();
     String s = null;
@@ -96,8 +98,9 @@ public class AbstractLuceneBean {
     // Email
     cv.setEmail(reader.readLine());
     // Conteudo
+    String newLine = System.getProperty("line.separator");
     while ((s = reader.readLine()) != null) {
-      builder.append(s);
+      builder.append(s).append(newLine);
     }
     // Fecha o FileReader e o BufferedReader
     reader.close();
