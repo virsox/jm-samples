@@ -12,11 +12,14 @@ import javax.ejb.Stateless;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.CorruptIndexException;
 import org.apache.lucene.index.IndexReader;
+import org.apache.lucene.index.Term;
 import org.apache.lucene.queryParser.ParseException;
 import org.apache.lucene.queryParser.QueryParser;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
+import org.apache.lucene.search.TermQuery;
+import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.search.TopScoreDocCollector;
 import org.apache.lucene.util.Version;
 
@@ -45,38 +48,43 @@ public class SearchServiceBean extends AbstractLuceneBean implements
   /**
    * {@inheritDoc}
    * 
-   * @see #findCVByField(String, String)
+   * @see #executeQuery(Query)
    * @see Constants#FIELD_NAME
    */
   @Override
   public List<SearchResult> findCVByName(String name)
-      throws CurriculumException
-  {
-    return findCVByField(name, Constants.FIELD_NAME);
+      throws CurriculumException {
+    Query q = new TermQuery(new Term(Constants.FIELD_NAME, name));
+    return executeQuery(q);
   }
 
   /**
    * {@inheritDoc}
    * 
-   * @see #findCVByField(String, String)
+   * @see #executeQuery(Query)
    * @see Constants#FIELD_CONTENT
    */
   @Override
   public List<SearchResult> findCVByContent(String content)
       throws CurriculumException
   {
-    return findCVByField(content, Constants.FIELD_CONTENT);
+    // Cria um objeto Query para efetuar a busca
+    Query q = null;
+    try {
+      q = new QueryParser(Version.LUCENE_35, Constants.FIELD_CONTENT, analyzer)
+          .parse(content);
+    } catch (ParseException pex) {
+      throw new CurriculumException("Erro no parse da consulta.", pex);
+    }
+
+    return executeQuery(q);
   }
 
   /**
-   * Executa a busca por <TT>content</TT> no campo <TT>field</TT> no índice.
+   * Executa a busca a partir do objeto Query passado como parâmetro.
    * 
    * 
-   * @param content
-   *            conteúdo a ser procurado
-   * @param field
-   *            nome do campo onde será feita a busca
-   * @return uma lista com os currículos encontrados
+   * @param q Consulta a ser executada
    * @throws CurriculumException
    * 
    * @see #findCVByContent(String)
@@ -91,30 +99,24 @@ public class SearchServiceBean extends AbstractLuceneBean implements
    * @see ScoreDoc
    * @see Document
    */
-  private List<SearchResult> findCVByField(String content, String field)
+  private List<SearchResult> executeQuery(Query q)
       throws CurriculumException
   {
     // Inicializa a lista de resultados
     List<SearchResult> results = new ArrayList<SearchResult>();
 
     try {
-      // Cria um objeto Query para efetuar a busca
-      Query q = new QueryParser(Version.LUCENE_35, field, analyzer)
-          .parse(content);
 
       // Quantidade de hits por página
-      int hitsPerPage = 10;
-      // Abre o índice
+      int hitsPerPage = 30;
+    
+      // Abre o índice e cria um IndexSearcher
       IndexReader reader = IndexReader.open(dir);
-      // Cria um IndexSearcher para o índice
       IndexSearcher searcher = new IndexSearcher(reader);
-      // Cria um Collector para a busca
-      TopScoreDocCollector collector = TopScoreDocCollector.create(hitsPerPage,
-          true);
+      
       // Executa a busca
-      searcher.search(q, collector);
-      // Obtém o resultado da busca
-      ScoreDoc[] hits = collector.topDocs().scoreDocs;
+      TopDocs topDocs = searcher.search(q, hitsPerPage);
+      ScoreDoc[] hits = topDocs.scoreDocs;
 
       // Para cada item encontrado, recrie o currículo e adiciona na lista
       // de resultados
@@ -134,9 +136,6 @@ public class SearchServiceBean extends AbstractLuceneBean implements
         // Adiciona na lista de resultados
         results.add(result);
       }
-    }
-    catch (ParseException e) {
-      throw new CurriculumException("Erro ao criar QueryParser.", e);
     }
     catch (CorruptIndexException e) {
       throw new CurriculumException("Erro ao abrir IndexReader.", e);

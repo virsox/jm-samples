@@ -1,9 +1,10 @@
 package br.com.jm.cvsearcher.service.impl;
 
 import java.io.File;
-import java.io.FileWriter;
+import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 
 import javax.ejb.Local;
@@ -72,7 +73,9 @@ public class CurriculumServiceBean extends AbstractLuceneBean implements
     try {
       // Abre o arquivo
       file = new File(config.getFilesDirectory(), getNextId() + ".txt");
-      writer = new PrintWriter(new FileWriter(file));
+      writer = new PrintWriter(new OutputStreamWriter(new FileOutputStream(
+          file), "UTF-8"));
+      
 
       // Escreve os dados no arquivo
       writer.println(cv.getName());
