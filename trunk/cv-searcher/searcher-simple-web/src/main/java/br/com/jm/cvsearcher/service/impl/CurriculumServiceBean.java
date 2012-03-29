@@ -18,6 +18,7 @@ import org.apache.lucene.document.Field.Store;
 import org.apache.lucene.index.CorruptIndexException;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
+import org.apache.lucene.index.IndexWriterConfig.OpenMode;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.LockObtainFailedException;
 import org.apache.lucene.util.Version;
@@ -151,6 +152,8 @@ public class CurriculumServiceBean extends AbstractLuceneBean implements
     // Cria o IndexWriterConfig
     IndexWriterConfig indexConfig = new IndexWriterConfig(Version.LUCENE_35,
         analyzer);
+    // Informar que queremos recriar o índice
+    indexConfig.setOpenMode(OpenMode.CREATE);
 
     // Cria o IndexWriter
     IndexWriter w = null;
