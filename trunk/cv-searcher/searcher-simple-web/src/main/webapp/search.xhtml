@@ -14,6 +14,13 @@
 <h:head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<title>CV Search :: Add</title>
+	<style>
+	SPAN.highlight {
+		font-weight: bold;
+		background-color: yellow;
+		color: red;
+	}
+	</style>
 </h:head>
 
 <h:body>
@@ -53,7 +60,7 @@
 				<f:facet name="header">
                     Nome
                 </f:facet>
-				<h:outputText value="#{result.curriculum.name}" />
+				<h:outputText scape="false" value="#{result.curriculum.name}" />
 			</p:column>
 
 			<p:column>
@@ -72,9 +79,7 @@
 
 
             <p:rowExpansion>
-                <h:panelGrid columns="1"  styleClass="ui-widget-content" style="font-size: 80%">
-                    <h:inputTextarea value="#{result.curriculum.content}" disabled="true" style="width: 100%;"/>
-                </h:panelGrid>
+                	<h:outputText escape="false" value="#{result.curriculum.content}" style="width: 100%;"/>
 
             </p:rowExpansion>
             
