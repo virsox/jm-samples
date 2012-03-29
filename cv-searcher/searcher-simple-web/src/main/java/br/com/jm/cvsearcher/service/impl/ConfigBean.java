@@ -35,7 +35,7 @@ public class ConfigBean {
    * c:/Temp.
    */
   public ConfigBean() {
-    this.setRootFolder("/Users/virso/tmp/cv-searcher");
+    this.setRootFolder("c:/temp");
   }
 
   /**
