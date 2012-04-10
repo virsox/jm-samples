@@ -15,6 +15,7 @@ import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.Field.Index;
 import org.apache.lucene.document.Field.Store;
+import org.apache.lucene.document.Field.TermVector;
 import org.apache.lucene.index.CorruptIndexException;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
@@ -84,7 +85,7 @@ public class CurriculumServiceBean extends AbstractLuceneBean implements
       writer.println(cv.getContent());
 
       // Chama a indexação
-      this.index(cv, file);
+      //this.index(cv, file);
       
     } catch (IOException e) {
       // Caso ocorra algum erro, lançar uma exception
@@ -259,7 +260,7 @@ public class CurriculumServiceBean extends AbstractLuceneBean implements
         Index.NOT_ANALYZED_NO_NORMS));
     // Adicionar o conteúdo do currículo
     doc.add(new Field(Constants.FIELD_CONTENT, cv.getContent(), Store.NO,
-        Index.ANALYZED));
+        Index.ANALYZED, TermVector.WITH_POSITIONS_OFFSETS));
 
     return doc;
   }
