@@ -1,0 +1,79 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ml="http://musiclib.googlecode.com"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>CV Search :: Add</title>
+</h:head>
+
+<h:body>
+	<ml:menu id="menu" />
+	<p:messages id="msgs" showDetail="true" />
+
+    <h1>Novo Currículo</h1> 
+	<h:form acceptcharset="UTF-8">
+        <p:panelGrid>
+		    <p:row>
+	            <p:column><h:outputText value="Nome:" /></p:column>
+	            <p:column colspan="2">
+	               <h:inputText value="#{addBean.cv.name}" id="name" label="Nome" required="true" size="60" />
+	            </p:column>
+		    </p:row>         
+
+            <p:row>
+                <p:column><h:outputText value="Email:" /></p:column>
+                <p:column colspan="2">
+                    <h:inputText value="#{addBean.cv.email}" id="email" label="Email" required="true" size="60" />
+                </p:column>                
+            </p:row>
+            
+            <p:row>
+                <p:column><h:outputText value="Endereço:" /></p:column>
+                <p:column>
+                    <h:inputText value="#{addBean.cv.address.streetName}" id="address_streetName" label="Endereço" required="true" size="60" />
+                </p:column>
+                <p:column>
+                    <h:inputText value="#{addBean.cv.address.number}" id="address_number" label="Número" required="true" size="5" />
+                </p:column>
+            </p:row>
+
+            <p:row>
+                <p:column><h:outputText value="Cidade/UF:" /></p:column>
+                <p:column>
+                    <h:inputText value="#{addBean.cv.address.city}" id="address_city" label="Cidade" required="true" size="60" />
+                </p:column>
+                <p:column>
+                    <h:inputText value="#{addBean.cv.address.state}" id="address_state" label="Estado" required="true" size="3" />
+                </p:column>
+            </p:row>
+            
+            <p:row>
+                <p:column><h:outputText value="Conteúdo:" /></p:column>
+                <p:column colspan="2">
+                    <h:inputTextarea value="#{addBean.cv.content}" id="description"
+                        label="Descrição" required="true" rows="15" cols="50" />
+                </p:column>
+            </p:row>
+
+
+		</p:panelGrid>
+
+		<p:commandButton action="#{addBean.addCurriculum}" value="Criar"
+			ajax="false" update="msgs" />
+		<p:commandButton action="main" value="Cancelar" ajax="false" immediate="true"/>
+
+	</h:form>
+
+</h:body>
+
+</html>

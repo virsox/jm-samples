@@ -1,0 +1,48 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ml="http://musiclib.googlecode.com"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>CV Search :: Add</title>
+</h:head>
+
+<h:body>
+	<ml:menu id="menu" />
+	<p:messages id="msgs" showDetail="true" />
+
+    <h1>Novo Currículo</h1> 
+	<h:form acceptcharset="UTF-8">
+		<h:panelGrid columns="2">
+			<h:outputText value="Nome:" />
+			<h:inputText value="#{addBean.cv.name}" id="name" label="Nome"
+				required="true" />
+
+			<h:outputText value="Email:" />
+			<h:inputText value="#{addBean.cv.email}" id="email" label="Email"
+				required="true" />
+
+			<h:outputText value="Conteúdo:" />
+			<h:inputTextarea value="#{addBean.cv.content}" id="description"
+				label="Descrição" required="true" rows="15" cols="50" />
+
+		</h:panelGrid>
+
+		<p:commandButton action="#{addBean.addCurriculum}" value="Criar"
+			ajax="false" update="msgs" />
+		<p:commandButton action="main" value="Cancelar" ajax="false" immediate="true"/>
+
+	</h:form>
+
+</h:body>
+
+</html>
