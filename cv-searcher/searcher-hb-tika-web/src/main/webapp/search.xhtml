@@ -1,0 +1,97 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ml="http://musiclib.googlecode.com"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>CV Search :: Add</title>
+	<style>
+	SPAN.highlight {
+		font-weight: bold;
+		background-color: yellow;
+		color: red;
+	}
+	</style>
+</h:head>
+
+<h:body>
+	<ml:menu id="menu" />
+
+    <h1>Buscar Currículo</h1> 
+	<h:form>
+		<p:messages id="msgs" showDetail="true" />
+
+		<h:panelGrid columns="2">
+			<h:outputText value="Palavra chave:" />
+			<h:inputText value="#{searchBean.keyword}" id="keyword"
+				label="Palavra chave" required="true" />
+			<h:selectOneRadio id="sor" value="#{searchBean.type}"
+				title="Tipo de busca">
+				<f:selectItem id="name" itemLabel="Buscar por nome" itemValue="NAME" />
+				<f:selectItem id="content" itemLabel="Buscar por conteúdo"
+					itemValue="CONTENT" />
+			</h:selectOneRadio>
+
+		</h:panelGrid>
+
+		<p:commandButton action="#{searchBean.search}" value="Procurar"
+			ajax="true" update="results,msgs" />
+
+
+		<hr />
+		<p:dataTable id="results" var="curriculum" value="#{searchBean.results}"
+			paginator="true" rows="10"
+			paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+			rowsPerPageTemplate="5,10,15">
+			<p:column style="width:16px">  
+                <p:rowToggler />  
+            </p:column>  
+			
+			<p:column id="modelHeader">
+				<f:facet name="header">
+                    Nome
+                </f:facet>
+				<h:outputText scape="false" value="#{curriculum.name}" />
+			</p:column>
+
+			<p:column>
+				<f:facet name="header">
+                    Email
+                </f:facet>
+				<h:outputText value="#{curriculum.email}" />
+			</p:column>
+
+			<!-- <p:column>
+				<f:facet name="header">
+                    Score
+                </f:facet>
+				<h:outputText value="#{result.score}" />
+			</p:column>  -->
+
+
+            <p:rowExpansion>
+                	<h:outputText escape="false" value="#{curriculum.content}" style="width: 100%;"/>
+
+            </p:rowExpansion>
+            
+            <!--      <f:facet name="header">
+                    Content
+                </f:facet>
+
+            </p:column> -->
+
+		</p:dataTable>
+	</h:form>
+
+</h:body>
+
+</html>
