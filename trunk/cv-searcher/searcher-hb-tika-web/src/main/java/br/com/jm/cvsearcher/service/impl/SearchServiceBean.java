@@ -25,84 +25,79 @@ import br.com.jm.cvsearcher.util.Constants;
  */
 @Stateless
 @Local(SearchService.class)
-public class SearchServiceBean implements SearchService, Serializable
-{
-  /**
+public class SearchServiceBean implements SearchService, Serializable {
+	/**
    * 
    */
-  private static final long serialVersionUID = 2946540838935661231L;
-  
-  /** Entity manager. */
-  @PersistenceContext(name = "default")
-  protected EntityManager entityManager;
-  
-  /**
-   * {@inheritDoc}
-   * 
-   * @see #executeQuery(Query)
-   * @see Constants#FIELD_NAME
-   */
-  @Override
-  @SuppressWarnings("unchecked")
-  public List<Curriculum> findCVByName(String name)
-      throws CurriculumException
-  {
-    FullTextEntityManager fullTextEntityManager = 
-        org.hibernate.search.jpa.Search.getFullTextEntityManager(entityManager);
+	private static final long serialVersionUID = 2946540838935661231L;
 
-    // create native Lucene query unsing the query DSL
-    // alternatively you can write the Lucene query using the Lucene query parser
-    // or the Lucene programmatic API. The Hibernate Search DSL is recommended though
-    QueryBuilder qb = fullTextEntityManager.getSearchFactory()
-        .buildQueryBuilder().forEntity(Curriculum.class ).get();
-    
-    org.apache.lucene.search.Query query = qb
-      .keyword()
-      .onFields("name")
-      .matching(name)
-      .createQuery();
+	/** Entity manager. */
+	@PersistenceContext(name = "default")
+	protected EntityManager entityManager;
 
-    // wrap Lucene query in a javax.persistence.Query
-    javax.persistence.Query persistenceQuery = 
-        fullTextEntityManager.createFullTextQuery(query, Curriculum.class);
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @see #executeQuery(Query)
+	 * @see Constants#FIELD_NAME
+	 */
+	@Override
+	@SuppressWarnings("unchecked")
+	public List<Curriculum> findCVByName(String name)
+			throws CurriculumException {
+		FullTextEntityManager fullTextEntityManager = org.hibernate.search.jpa.Search
+				.getFullTextEntityManager(entityManager);
 
-    // execute search
-    return persistenceQuery.getResultList();
-  }
+		// create native Lucene query unsing the query DSL
+		// alternatively you can write the Lucene query using the Lucene query
+		// parser
+		// or the Lucene programmatic API. The Hibernate Search DSL is
+		// recommended though
+		QueryBuilder qb = fullTextEntityManager.getSearchFactory()
+				.buildQueryBuilder().forEntity(Curriculum.class).get();
 
-  /**
-   * {@inheritDoc}
-   * 
-   * @see #executeQuery(Query)
-   * @see Constants#FIELD_CONTENT
-   */
-  @SuppressWarnings("unchecked")
-  @Override
-  public List<Curriculum> findCVByContent(String content)
-      throws CurriculumException
-  {
-    
-    FullTextEntityManager fullTextEntityManager = 
-        org.hibernate.search.jpa.Search.getFullTextEntityManager(entityManager);
+		org.apache.lucene.search.Query query = qb.keyword().onFields("name")
+				.matching(name).createQuery();
 
-    // create native Lucene query unsing the query DSL
-    // alternatively you can write the Lucene query using the Lucene query parser
-    // or the Lucene programmatic API. The Hibernate Search DSL is recommended though
-    QueryBuilder qb = fullTextEntityManager.getSearchFactory()
-        .buildQueryBuilder().forEntity(Curriculum.class ).get();
-    
-    org.apache.lucene.search.Query query = qb
-      .keyword()
-      .onFields("content")
-      .matching(content)
-      .createQuery();
+		// wrap Lucene query in a javax.persistence.Query
+		javax.persistence.Query persistenceQuery = fullTextEntityManager
+				.createFullTextQuery(query, Curriculum.class);
 
-    // wrap Lucene query in a javax.persistence.Query
-    javax.persistence.Query persistenceQuery = 
-        fullTextEntityManager.createFullTextQuery(query, Curriculum.class);
+		// execute search
+		return persistenceQuery.getResultList();
+	}
 
-    // execute search
-    return persistenceQuery.getResultList();
-  }
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @see #executeQuery(Query)
+	 * @see Constants#FIELD_CONTENT
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Curriculum> findCVByContent(String content)
+			throws CurriculumException {
+
+		FullTextEntityManager fullTextEntityManager = org.hibernate.search.jpa.Search
+				.getFullTextEntityManager(entityManager);
+
+		// create native Lucene query unsing the query DSL
+		// alternatively you can write the Lucene query using the Lucene query
+		// parser
+		// or the Lucene programmatic API. The Hibernate Search DSL is
+		// recommended though
+		QueryBuilder qb = fullTextEntityManager.getSearchFactory()
+				.buildQueryBuilder().forEntity(Curriculum.class).get();
+
+		org.apache.lucene.search.Query query = qb.keyword().onFields("content")
+				.matching(content).createQuery();
+
+		// wrap Lucene query in a javax.persistence.Query
+		javax.persistence.Query persistenceQuery = fullTextEntityManager
+				.createFullTextQuery(query, Curriculum.class);
+
+		// execute search
+		return persistenceQuery.getResultList();
+	}
 
 }

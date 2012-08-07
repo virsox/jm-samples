@@ -10,15 +10,14 @@ import br.com.jm.cvsearcher.model.Curriculum;
  */
 public interface CurriculumService {
 
-
-  /**
-   * Adiciona e indexa um novo currículo.
-   * 
-   * @param cv
-   *            Currículo a ser adicionado
-   * 
-   * @throws CurriculumException
-   */
-  public void addCurriculum(Curriculum cv) throws CurriculumException;
+	/**
+	 * Adiciona e indexa um novo currículo.
+	 * 
+	 * @param cv
+	 *            Currículo a ser adicionado
+	 * 
+	 * @throws CurriculumException
+	 */
+	public void addCurriculum(Curriculum cv) throws CurriculumException;
 
 }

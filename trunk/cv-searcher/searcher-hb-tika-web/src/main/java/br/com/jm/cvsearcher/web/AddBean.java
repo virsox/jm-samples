@@ -6,6 +6,8 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.primefaces.model.UploadedFile;
+
 import br.com.jm.cvsearcher.model.Curriculum;
 import br.com.jm.cvsearcher.service.CurriculumException;
 import br.com.jm.cvsearcher.service.CurriculumService;
@@ -19,57 +21,69 @@ import br.com.jm.cvsearcher.util.Constants;
 @RequestScoped
 @Named
 public class AddBean {
-  /** Currículo a ser adicionado. */
-  private Curriculum cv;
+	/** Currículo a ser adicionado. */
+	private Curriculum cv;
 
-  /** Bean de serviço. Injetado pelo container. */
-  @Inject
-  private CurriculumService service;
+	private UploadedFile file;
 
-  /**
-   * Construtor padrão. Cria uma nova instância de Curriculum
-   */
-  public AddBean() {
-    this.cv = new Curriculum();
-  }
+	/** Bean de serviço. Injetado pelo container. */
+	@Inject
+	private CurriculumService service;
 
-  /**
-   * @return Retorna a instância de Curriculum
-   */
-  public Curriculum getCv() {
-    return cv;
-  }
+	/**
+	 * Construtor padrão. Cria uma nova instância de Curriculum
+	 */
+	public AddBean() {
+		this.cv = new Curriculum();
+	}
 
-  /**
-   * Adiciona e indexa um novo currículo.
-   * 
-   * @return {@link Constants#MAIN} se o currículo foi adicionado corretamente
-   *         ou {@link Constants#ADD_CV} caso ocorra algum erro
-   */
-  public String addCurriculum() {
-    String r;
-    FacesContext context = FacesContext.getCurrentInstance();
+	/**
+	 * @return Retorna a instância de Curriculum
+	 */
+	public Curriculum getCv() {
+		return cv;
+	}
 
-    try {
-      // Chama o serviço para adicionar e indexar o currículo
-      service.addCurriculum(cv);
-      // Usuário será redirecionado para a página principal
-      r = Constants.MAIN;
-      // Adicionar uma mensagem de sucesso
-      context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,
-          "Sucesso", "Currículo adicionado com sucesso."));
+	/**
+	 * Adiciona e indexa um novo currículo.
+	 * 
+	 * @return {@link Constants#MAIN} se o currículo foi adicionado corretamente
+	 *         ou {@link Constants#ADD_CV} caso ocorra algum erro
+	 */
+	public String addCurriculum() {
+		String r;
+		FacesContext context = FacesContext.getCurrentInstance();
 
-    }
-    catch (CurriculumException e) {
-      // Algum erro aconteceu ao inserir o currículo.
-      // Redirecionar o usuario para a página de adição
-      // para outra tentativa
-      r = Constants.ADD_CV;
-      // Adicionar a mensagem de erro no contexto
-      context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
-          "Erro", e.getMessage()));
-    }
+		try {
+			// Chama o serviço para adicionar e indexar o currículo
+			service.addCurriculum(cv);
+			// Usuário será redirecionado para a página principal
+			r = Constants.MAIN;
+			// Adicionar uma mensagem de sucesso
+			context.addMessage(null, new FacesMessage(
+					FacesMessage.SEVERITY_INFO, "Sucesso",
+					"Currículo adicionado com sucesso."));
 
-    return r;
-  }
+		} catch (CurriculumException e) {
+			// Algum erro aconteceu ao inserir o currículo.
+			// Redirecionar o usuario para a página de adição
+			// para outra tentativa
+			r = Constants.ADD_CV;
+			// Adicionar a mensagem de erro no contexto
+			context.addMessage(null, new FacesMessage(
+					FacesMessage.SEVERITY_ERROR, "Erro", e.getMessage()));
+		}
+
+		return r;
+	}
+
+	public UploadedFile getFile() {
+		return file;
+	}
+
+	public void setFile(UploadedFile file) {
+		this.file = file;
+		this.cv.setContent(file.getContents());
+	}
+
 }

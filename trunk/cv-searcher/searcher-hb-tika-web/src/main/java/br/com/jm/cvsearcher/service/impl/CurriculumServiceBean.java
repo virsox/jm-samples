@@ -21,40 +21,42 @@ import br.com.jm.cvsearcher.service.CurriculumService;
 @Local(CurriculumService.class)
 public class CurriculumServiceBean implements CurriculumService {
 
-  /** Entity manager. */
-  @PersistenceContext(name = "default")
-  protected EntityManager entityManager;
-  
-  /**
-   * {@inheritDoc}
-   * 
-   * Salva o arquivo na pasta de armazenamento de arquivos.
-   * 
-   * O arquivo do currículo é salvao da seguinte forma:
-   * <ol>
-   * <li>A primeira linha contém o nome do candidato</li>
-   * <li>A segunda linha contém o email do candidato</li>
-   * <li>A terceira linha em dianta, contém o conteúdo do currículo</li>
-   * </ol>
-   * 
-   * O nome do arquivo é formado pela quantidade de arquivos na pasta de
-   * armazenamento + 1, adicionado a extensão '.txt'.
-   * 
-   * Após armazenar o arquivo em disco, o engine de indexação é chamado para
-   * indexar o novo currículo.
-   * 
-   * @see ConfigBean#getFilesDirectory()
-   * @see #getNextId()
-   * @see #index(Curriculum, File)
-   */
-  @Override
-  public void addCurriculum(Curriculum cv) throws CurriculumException {
+	/** Entity manager. */
+	@PersistenceContext(name = "default")
+	protected EntityManager entityManager;
 
-    // Verifica se o currículo não está nulo
-    if (cv == null) { throw new CurriculumException("Curriculum cannot be null"); }
-    
-    this.entityManager.persist(cv);
-    
-  }
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * Salva o arquivo na pasta de armazenamento de arquivos.
+	 * 
+	 * O arquivo do currículo é salvao da seguinte forma:
+	 * <ol>
+	 * <li>A primeira linha contém o nome do candidato</li>
+	 * <li>A segunda linha contém o email do candidato</li>
+	 * <li>A terceira linha em dianta, contém o conteúdo do currículo</li>
+	 * </ol>
+	 * 
+	 * O nome do arquivo é formado pela quantidade de arquivos na pasta de
+	 * armazenamento + 1, adicionado a extensão '.txt'.
+	 * 
+	 * Após armazenar o arquivo em disco, o engine de indexação é chamado para
+	 * indexar o novo currículo.
+	 * 
+	 * @see ConfigBean#getFilesDirectory()
+	 * @see #getNextId()
+	 * @see #index(Curriculum, File)
+	 */
+	@Override
+	public void addCurriculum(Curriculum cv) throws CurriculumException {
+
+		// Verifica se o currículo não está nulo
+		if (cv == null) {
+			throw new CurriculumException("Curriculum cannot be null");
+		}
+
+		this.entityManager.persist(cv);
+
+	}
 
 }
