@@ -14,9 +14,11 @@ public class CurriculumException extends Exception {
 	 */
 	private static final long serialVersionUID = 3250163722501611445L;
 
-	/** 
+	/**
 	 * Construtor simples.
-	 * @param message Mensagem de erro.
+	 * 
+	 * @param message
+	 *            Mensagem de erro.
 	 */
 	public CurriculumException(String message) {
 		super(message);
@@ -24,8 +26,11 @@ public class CurriculumException extends Exception {
 
 	/**
 	 * Construtor completo.
-	 * @param message Mensagem de erro
-	 * @param cause Causa original da exception
+	 * 
+	 * @param message
+	 *            Mensagem de erro
+	 * @param cause
+	 *            Causa original da exception
 	 */
 	public CurriculumException(String message, Throwable cause) {
 		super(message, cause);

@@ -9,7 +9,7 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:ml="http://musiclib.googlecode.com"
-	xmlns:p="http://primefaces.prime.com.tr/ui">
+	xmlns:p="http://primefaces.org/ui">
 
 <h:head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -21,7 +21,7 @@
 	<p:messages id="msgs" showDetail="true" />
 
     <h1>Novo Currículo</h1> 
-	<h:form acceptcharset="UTF-8">
+	<h:form acceptcharset="UTF-8" enctype="multipart/form-data">
 		<h:panelGrid columns="2">
 			<h:outputText value="Nome:" />
 			<h:inputText value="#{addBean.cv.name}" id="name" label="Nome"
@@ -32,13 +32,12 @@
 				required="true" />
 
 			<h:outputText value="Conteúdo:" />
-			<h:inputTextarea value="#{addBean.cv.content}" id="description"
-				label="Descrição" required="true" rows="15" cols="50" />
+			<p:fileUpload value="#{addBean.file}" mode="simple" />
 
 		</h:panelGrid>
 
 		<p:commandButton action="#{addBean.addCurriculum}" value="Criar"
-			ajax="false" update="msgs" />
+			ajax="false" />
 		<p:commandButton action="main" value="Cancelar" ajax="false" immediate="true"/>
 
 	</h:form>
