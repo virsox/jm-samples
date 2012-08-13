@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.tika.exception.TikaException;
 import org.apache.tika.metadata.Metadata;
 import org.apache.tika.parser.AutoDetectParser;
@@ -53,6 +55,10 @@ public class TikaBridge implements StringBridge, ParameterizedBridge {
 	private static final String TYPE_PROPERTY = "type";
 	/** Tipo de decodificador que será utilizado. */
 	private SupportedTypes type;
+	/**
+	 * Log
+	 */
+	private Log log = LogFactory.getLog(TikaBridge.class);
 
 	/**
 	 * {@inheritDoc}
@@ -91,7 +97,8 @@ public class TikaBridge implements StringBridge, ParameterizedBridge {
 	 * 
 	 * @param data
 	 *            Dados para serem decodificados
-	 * @return dados codificados no formato String
+	 * @return dados codificados no formato String. Caso ocorra algum erro, o
+	 *         retorna será uma String vazia.
 	 * 
 	 * @see Curriculum#getContent()
 	 * @see Parser
@@ -111,18 +118,15 @@ public class TikaBridge implements StringBridge, ParameterizedBridge {
 			parser.parse(inputStream, handler, metadata, context);
 			inputStream.close();
 		} catch (IOException e) {
-			// error reading file
-			// FIXME PRocessar exception
-			e.printStackTrace();
+			log.error("Erro lendo o arquivo.", e);
+			return "";
 
 		} catch (SAXException e) {
-			e.printStackTrace();
-			// FIXME PRocessar exception
-
+			log.error("Erro ao processar o arquivo.", e);
+			return "";
 		} catch (TikaException e) {
-			// corrupt
-			e.printStackTrace();
-			// FIXME PRocessar exception
+			log.error("Arquivo corrompido ou formato inválido.", e);
+			return "";
 		}
 
 		return myHandler.getContent();
