@@ -15,18 +15,18 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<title>CV Search :: Add</title>
 	<style>
-	SPAN.highlight {
-		font-weight: bold;
-		background-color: yellow;
-		color: red;
-	}
-	</style>
+SPAN.highlight {
+	font-weight: bold;
+	background-color: yellow;
+	color: red;
+}
+</style>
 </h:head>
 
 <h:body>
 	<ml:menu id="menu" />
 
-    <h1>Buscar Currículo</h1> 
+	<h1>Buscar Currículo</h1>
 	<h:form>
 		<p:messages id="msgs" showDetail="true" />
 
@@ -48,19 +48,21 @@
 
 
 		<hr />
-		<p:dataTable id="results" var="curriculum" value="#{searchBean.results}"
-			paginator="true" rows="10"
+		<p:dataTable id="results" var="curriculum"
+			value="#{searchBean.results}" paginator="true" rows="10"
 			paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
 			rowsPerPageTemplate="5,10,15">
-			<p:column style="width:16px">  
-                <p:rowToggler />  
-            </p:column>  
-			
+			<p:column style="width:16px">
+				<p:rowToggler />
+			</p:column>
+
 			<p:column id="modelHeader">
 				<f:facet name="header">
                     Nome
                 </f:facet>
-				<h:outputText scape="false" value="#{curriculum.name}" />
+				<p:commandLink id="downloadLink" value="#{curriculum.name}" ajax="false">
+					<p:fileDownload value="#{searchBean.downloadFile(curriculum)}" />
+				</p:commandLink>
 			</p:column>
 
 			<p:column>
@@ -69,25 +71,6 @@
                 </f:facet>
 				<h:outputText value="#{curriculum.email}" />
 			</p:column>
-
-			<!-- <p:column>
-				<f:facet name="header">
-                    Score
-                </f:facet>
-				<h:outputText value="#{result.score}" />
-			</p:column>  -->
-
-
-            <p:rowExpansion>
-                	<h:outputText escape="false" value="#{curriculum.content}" style="width: 100%;"/>
-
-            </p:rowExpansion>
-            
-            <!--      <f:facet name="header">
-                    Content
-                </f:facet>
-
-            </p:column> -->
 
 		</p:dataTable>
 	</h:form>

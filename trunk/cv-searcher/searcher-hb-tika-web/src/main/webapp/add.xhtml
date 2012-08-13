@@ -21,23 +21,55 @@
 	<p:messages id="msgs" showDetail="true" />
 
     <h1>Novo Currículo</h1> 
-	<h:form acceptcharset="UTF-8" enctype="multipart/form-data">
-		<h:panelGrid columns="2">
-			<h:outputText value="Nome:" />
-			<h:inputText value="#{addBean.cv.name}" id="name" label="Nome"
-				required="true" />
+	<h:form acceptcharset="UTF-8"  enctype="multipart/form-data">
+        <p:panelGrid>
+		    <p:row>
+	            <p:column><h:outputText value="Nome:" /></p:column>
+	            <p:column colspan="2">
+	               <h:inputText value="#{addBean.cv.name}" id="name" label="Nome" required="true" size="60" />
+	            </p:column>
+		    </p:row>
 
-			<h:outputText value="Email:" />
-			<h:inputText value="#{addBean.cv.email}" id="email" label="Email"
-				required="true" />
+            <p:row>
+                <p:column><h:outputText value="Email:" /></p:column>
+                <p:column colspan="2">
+                    <h:inputText value="#{addBean.cv.email}" id="email" label="Email" required="true" size="60" />
+                </p:column>                
+            </p:row>
+            
+            <p:row>
+                <p:column><h:outputText value="Endereço:" /></p:column>
+                <p:column>
+                    <h:inputText value="#{addBean.cv.address.streetName}" id="address_streetName" label="Endereço" required="true" size="60" />
+                </p:column>
+                <p:column>
+                    <h:inputText value="#{addBean.cv.address.number}" id="address_number" label="Número" required="true" size="5" />
+                </p:column>
+            </p:row>
 
-			<h:outputText value="Conteúdo:" />
-			<p:fileUpload value="#{addBean.file}" mode="simple" />
+            <p:row>
+                <p:column><h:outputText value="Cidade/UF:" /></p:column>
+                <p:column>
+                    <h:inputText value="#{addBean.cv.address.city}" id="address_city" label="Cidade" required="true" size="60" />
+                </p:column>
+                <p:column>
+                    <h:inputText value="#{addBean.cv.address.state}" id="address_state" label="Estado" required="true" size="3" />
+                </p:column>
+            </p:row>
+            
+            <p:row>
+                <p:column><h:outputText value="Conteúdo:" /></p:column>
+                <p:column colspan="2">
+                    <p:fileUpload value="#{addBean.file}" mode="simple" />
+                </p:column>
+            </p:row>
 
-		</h:panelGrid>
+			
+
+		</p:panelGrid>
 
 		<p:commandButton action="#{addBean.addCurriculum}" value="Criar"
-			ajax="false" />
+			ajax="false" update="msgs" />
 		<p:commandButton action="main" value="Cancelar" ajax="false" immediate="true"/>
 
 	</h:form>

@@ -89,7 +89,7 @@ public class SearchServiceBean implements SearchService, Serializable {
 		QueryBuilder qb = fullTextEntityManager.getSearchFactory()
 				.buildQueryBuilder().forEntity(Curriculum.class).get();
 
-		org.apache.lucene.search.Query query = qb.keyword().onFields("content")
+		org.apache.lucene.search.Query query = qb.keyword().onFields("content").ignoreFieldBridge()
 				.matching(content).createQuery();
 
 		// wrap Lucene query in a javax.persistence.Query

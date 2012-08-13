@@ -1,5 +1,7 @@
 package br.com.jm.cvsearcher.web;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
@@ -9,6 +11,9 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
+
+import org.primefaces.model.DefaultStreamedContent;
+import org.primefaces.model.StreamedContent;
 
 import br.com.jm.cvsearcher.model.Curriculum;
 import br.com.jm.cvsearcher.service.CurriculumException;
@@ -104,6 +109,13 @@ public class SearchBean implements Serializable {
 
 	}
 
+	public StreamedContent downloadFile(Curriculum curriculum) {
+		InputStream stream = new ByteArrayInputStream(curriculum.getContent());
+		StreamedContent file = new DefaultStreamedContent(stream, "application/vnd.openxmlformats-officedocument.wordprocessingml.document", curriculum.getName()+".docx");
+		return file;
+	}
+	
+	
 	/**
 	 * @return the keyword
 	 */
