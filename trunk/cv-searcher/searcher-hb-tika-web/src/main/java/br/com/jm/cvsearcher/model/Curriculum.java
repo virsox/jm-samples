@@ -63,7 +63,6 @@ public class Curriculum {
 	 * 
 	 * @see #setName(String)
 	 * @see #setEmail(String)
-	 * @see #setContent(String)
 	 */
 	public Curriculum(String name, String email, byte[] content) {
 		this.setName(name);
@@ -122,6 +121,9 @@ public class Curriculum {
 		this.email = email;
 	}
 
+	/**
+	 * @return the address
+	 */
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "fk_address_id")
 	@IndexedEmbedded
@@ -129,6 +131,10 @@ public class Curriculum {
 		return this.address;
 	}
 
+	/**
+	 * @param address
+	 *            the address to set
+	 */
 	public void setAddress(Address address) {
 		this.address = address;
 	}
@@ -136,7 +142,7 @@ public class Curriculum {
 	/**
 	 * @return the content
 	 */
-	@Column(length=100000)
+	@Column(length = 100000)
 	@Lob
 	@Field(index = Index.YES, analyze = Analyze.YES, store = Store.NO, bridge =
 
@@ -153,4 +159,11 @@ public class Curriculum {
 		this.content = content;
 	}
 
+	@Override
+	public int hashCode() {
+		if (name != null) {
+			return name.hashCode();
+		}
+		return super.hashCode();
+	}
 }

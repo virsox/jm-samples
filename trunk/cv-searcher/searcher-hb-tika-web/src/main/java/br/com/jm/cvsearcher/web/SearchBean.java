@@ -109,13 +109,24 @@ public class SearchBean implements Serializable {
 
 	}
 
+	/**
+	 * Método utilitário para facilitar o download do arquivo binário. Obtém os
+	 * dados do curriculum e envia para o cliente indicando o formato Microsoft
+	 * Word
+	 * 
+	 * @param curriculum
+	 *            de qual currículo será extraído o arquivo.
+	 * @return o conteúdo do arquivo no formato Microsoft Word
+	 */
 	public StreamedContent downloadFile(Curriculum curriculum) {
 		InputStream stream = new ByteArrayInputStream(curriculum.getContent());
-		StreamedContent file = new DefaultStreamedContent(stream, "application/vnd.openxmlformats-officedocument.wordprocessingml.document", curriculum.getName()+".docx");
+		StreamedContent file = new DefaultStreamedContent(
+				stream,
+				"application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+				curriculum.getName() + ".docx");
 		return file;
 	}
-	
-	
+
 	/**
 	 * @return the keyword
 	 */

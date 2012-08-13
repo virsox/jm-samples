@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8' ?>
+<?xml version='1.0' encoding='ISO-8859-1' ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -20,8 +20,8 @@
 	<ml:menu id="menu" />
 	<p:messages id="msgs" showDetail="true" />
 
-    <h1>Novo CurrÃ­culo</h1> 
-	<h:form acceptcharset="UTF-8"  enctype="multipart/form-data">
+    <h1>Novo Currículo</h1> 
+	<h:form acceptcharset="ISO-8859-1"  enctype="multipart/form-data">
         <p:panelGrid>
 		    <p:row>
 	            <p:column><h:outputText value="Nome:" /></p:column>
@@ -38,12 +38,12 @@
             </p:row>
             
             <p:row>
-                <p:column><h:outputText value="EndereÃ§o:" /></p:column>
+                <p:column><h:outputText value="Endereço:" /></p:column>
                 <p:column>
-                    <h:inputText value="#{addBean.cv.address.streetName}" id="address_streetName" label="EndereÃ§o" required="true" size="60" />
+                    <h:inputText value="#{addBean.cv.address.streetName}" id="address_streetName" label="Endereço" required="true" size="60" />
                 </p:column>
                 <p:column>
-                    <h:inputText value="#{addBean.cv.address.number}" id="address_number" label="NÃºmero" required="true" size="5" />
+                    <h:inputText value="#{addBean.cv.address.number}" id="address_number" label="Número" required="true" size="5" />
                 </p:column>
             </p:row>
 
@@ -58,7 +58,7 @@
             </p:row>
             
             <p:row>
-                <p:column><h:outputText value="ConteÃºdo:" /></p:column>
+                <p:column><h:outputText value="Conteúdo:" /></p:column>
                 <p:column colspan="2">
                     <p:fileUpload value="#{addBean.file}" mode="simple" />
                 </p:column>
