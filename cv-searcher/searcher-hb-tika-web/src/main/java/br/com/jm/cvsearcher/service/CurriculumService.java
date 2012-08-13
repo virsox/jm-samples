@@ -17,6 +17,8 @@ public interface CurriculumService {
 	 *            Currículo a ser adicionado
 	 * 
 	 * @throws CurriculumException
+	 *             Lançada quando houver algum problema ao adicionar o
+	 *             currículo.
 	 */
 	public void addCurriculum(Curriculum cv) throws CurriculumException;
 

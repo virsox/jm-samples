@@ -10,12 +10,12 @@ import javax.persistence.PersistenceContext;
 
 import org.apache.lucene.search.Query;
 import org.hibernate.search.jpa.FullTextEntityManager;
+import org.hibernate.search.jpa.Search;
 import org.hibernate.search.query.dsl.QueryBuilder;
 
 import br.com.jm.cvsearcher.model.Curriculum;
 import br.com.jm.cvsearcher.service.CurriculumException;
 import br.com.jm.cvsearcher.service.SearchService;
-import br.com.jm.cvsearcher.util.Constants;
 
 /**
  * Implementação da interface {@link SearchService}.
@@ -38,8 +38,11 @@ public class SearchServiceBean implements SearchService, Serializable {
 	/**
 	 * {@inheritDoc}
 	 * 
-	 * @see #executeQuery(Query)
-	 * @see Constants#FIELD_NAME
+	 * Utiliza a implementação do Hibernate Search para buscar os currículos.
+	 * 
+	 * @see FullTextEntityManager
+	 * @see Search
+	 * @see Query
 	 */
 	@Override
 	@SuppressWarnings("unchecked")
@@ -70,8 +73,11 @@ public class SearchServiceBean implements SearchService, Serializable {
 	/**
 	 * {@inheritDoc}
 	 * 
-	 * @see #executeQuery(Query)
-	 * @see Constants#FIELD_CONTENT
+	 * Utiliza a implementação do Hibernate Search para buscar os currículos.
+	 * 
+	 * @see FullTextEntityManager
+	 * @see Search
+	 * @see Query
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
@@ -89,8 +95,8 @@ public class SearchServiceBean implements SearchService, Serializable {
 		QueryBuilder qb = fullTextEntityManager.getSearchFactory()
 				.buildQueryBuilder().forEntity(Curriculum.class).get();
 
-		org.apache.lucene.search.Query query = qb.keyword().onFields("content").ignoreFieldBridge()
-				.matching(content).createQuery();
+		org.apache.lucene.search.Query query = qb.keyword().onFields("content")
+				.ignoreFieldBridge().matching(content).createQuery();
 
 		// wrap Lucene query in a javax.persistence.Query
 		javax.persistence.Query persistenceQuery = fullTextEntityManager

@@ -18,6 +18,7 @@ public interface SearchService {
 	 *            Parte do nome do candidato
 	 * @return Lista de resultados da busca
 	 * @throws CurriculumException
+	 *             Lançada quando houver algum problema ao buscar o currículo.
 	 */
 	public List<Curriculum> findCVByName(String name)
 			throws CurriculumException;
@@ -29,6 +30,7 @@ public interface SearchService {
 	 *            Palavra chave a ser buscado no contaúdo do currículo
 	 * @return Lista de resultados da busca
 	 * @throws CurriculumException
+	 *             Lançada quando houver algum problema ao buscar o currículo.
 	 */
 	public List<Curriculum> findCVByContent(String content)
 			throws CurriculumException;

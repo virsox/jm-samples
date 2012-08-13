@@ -24,6 +24,7 @@ public class AddBean {
 	/** Currículo a ser adicionado. */
 	private Curriculum cv;
 
+	/** Objeto para receber o arquivo com o currículo do candidato */
 	private UploadedFile file;
 
 	/** Bean de serviço. Injetado pelo container. */
@@ -77,10 +78,24 @@ public class AddBean {
 		return r;
 	}
 
+	/**
+	 * 
+	 * @return the file
+	 */
 	public UploadedFile getFile() {
 		return file;
 	}
 
+	/**
+	 * Ao receber o arquivo enviado pelo formulário, ja extrai o conteúdo do
+	 * arquivo e adiciona no currículo
+	 * 
+	 * @param file
+	 *            the file to set
+	 * 
+	 * @see UploadedFile#getContents()
+	 * @see Curriculum#setContent(byte[])
+	 */
 	public void setFile(UploadedFile file) {
 		this.file = file;
 		this.cv.setContent(file.getContents());
