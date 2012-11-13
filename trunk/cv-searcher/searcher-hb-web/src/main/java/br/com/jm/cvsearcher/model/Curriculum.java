@@ -46,7 +46,7 @@ public class Curriculum {
 
   /**
    * Construtor completo. Inicializa as propriedades <tt>name</tt>,
-   * <tt>email</tt> e <tt>content</tt>.
+   * <tt>email</tt>, <tt>content</tt> e <tt>address</tt>.
    * 
    * @param name
    *            Nome do candidato
@@ -54,15 +54,18 @@ public class Curriculum {
    *            Email do candidato
    * @param content
    *            Conteúdo do currículo do candidato
+   * @param address
+   *            Endereço do candidato.
    * 
    * @see #setName(String)
    * @see #setEmail(String)
    * @see #setContent(String)
    */
-  public Curriculum(String name, String email, String content) {
+  public Curriculum(String name, String email, String content, Address address) {
     this.setName(name);
     this.setEmail(email);
     this.setContent(content);
+    this.setAddress(address);
   }
 
   /**
@@ -115,17 +118,6 @@ public class Curriculum {
   public void setEmail(String email) {
     this.email = email;
   }
-
-  @OneToOne(cascade = CascadeType.ALL)
-  @JoinColumn(name = "fk_address_id")
-  @IndexedEmbedded
-  public Address getAddress() {
-    return this.address;
-  }
-  
-  public void setAddress(Address address) {
-    this.address = address;
-  }
   
   /**
    * @return the content
@@ -144,4 +136,22 @@ public class Curriculum {
     this.content = content;
   }
 
+  /**
+   * @return the address
+   */
+  @OneToOne(cascade = CascadeType.ALL)
+  @JoinColumn(name = "fk_address_id")
+  @IndexedEmbedded
+  public Address getAddress() {
+    return this.address;
+  }
+  
+  /**
+   * @param address
+   *            the address to set
+   */
+  public void setAddress(Address address) {
+    this.address = address;
+  }
+  
 }

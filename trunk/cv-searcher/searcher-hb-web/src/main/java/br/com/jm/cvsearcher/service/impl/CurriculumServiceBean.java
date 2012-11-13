@@ -1,7 +1,5 @@
 package br.com.jm.cvsearcher.service.impl;
 
-import java.io.File;
-
 import javax.ejb.Local;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -28,24 +26,7 @@ public class CurriculumServiceBean implements CurriculumService {
   /**
    * {@inheritDoc}
    * 
-   * Salva o arquivo na pasta de armazenamento de arquivos.
-   * 
-   * O arquivo do currículo é salvao da seguinte forma:
-   * <ol>
-   * <li>A primeira linha contém o nome do candidato</li>
-   * <li>A segunda linha contém o email do candidato</li>
-   * <li>A terceira linha em dianta, contém o conteúdo do currículo</li>
-   * </ol>
-   * 
-   * O nome do arquivo é formado pela quantidade de arquivos na pasta de
-   * armazenamento + 1, adicionado a extensão '.txt'.
-   * 
-   * Após armazenar o arquivo em disco, o engine de indexação é chamado para
-   * indexar o novo currículo.
-   * 
-   * @see ConfigBean#getFilesDirectory()
-   * @see #getNextId()
-   * @see #index(Curriculum, File)
+   * Salva o currículo no banco de dados.
    */
   @Override
   public void addCurriculum(Curriculum cv) throws CurriculumException {
