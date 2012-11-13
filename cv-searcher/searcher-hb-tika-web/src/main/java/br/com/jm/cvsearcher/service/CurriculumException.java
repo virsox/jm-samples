@@ -9,31 +9,31 @@ package br.com.jm.cvsearcher.service;
  */
 public class CurriculumException extends Exception {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 3250163722501611445L;
+  /**
+   * 
+   */
+  private static final long serialVersionUID = 3250163722501611445L;
 
-	/**
-	 * Construtor simples.
-	 * 
-	 * @param message
-	 *            Mensagem de erro.
-	 */
-	public CurriculumException(String message) {
-		super(message);
-	}
+  /**
+   * Construtor simples.
+   * 
+   * @param message
+   *            Mensagem de erro.
+   */
+  public CurriculumException(String message) {
+    super(message);
+  }
 
-	/**
-	 * Construtor completo.
-	 * 
-	 * @param message
-	 *            Mensagem de erro
-	 * @param cause
-	 *            Causa original da exception
-	 */
-	public CurriculumException(String message, Throwable cause) {
-		super(message, cause);
-	}
+  /**
+   * Construtor completo.
+   * 
+   * @param message
+   *            Mensagem de erro
+   * @param cause
+   *            Causa original da exception
+   */
+  public CurriculumException(String message, Throwable cause) {
+    super(message, cause);
+  }
 
 }

@@ -19,28 +19,26 @@ import br.com.jm.cvsearcher.service.CurriculumService;
 @Local(CurriculumService.class)
 public class CurriculumServiceBean implements CurriculumService {
 
-	/** Entity manager. */
-	@PersistenceContext(name = "default")
-	protected EntityManager entityManager;
+  /** Entity manager. */
+  @PersistenceContext(name = "default")
+  protected EntityManager entityManager;
 
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * Salva o arquivo no banco de dados utilizando o EntityManager
-	 * 
-	 * @see EntityManager#persist(Object)
-	 * 
-	 */
-	@Override
-	public void addCurriculum(Curriculum cv) throws CurriculumException {
+  /**
+   * {@inheritDoc}
+   * 
+   * Salva o arquivo no banco de dados utilizando o EntityManager
+   * 
+   * @see EntityManager#persist(Object)
+   * 
+   */
+  @Override
+  public void addCurriculum(Curriculum cv) throws CurriculumException {
 
-		// Verifica se o currículo não está nulo
-		if (cv == null) {
-			throw new CurriculumException("Curriculum cannot be null");
-		}
+    // Verifica se o currículo não está nulo
+    if (cv == null) { throw new CurriculumException("Curriculum cannot be null"); }
 
-		this.entityManager.persist(cv);
+    this.entityManager.persist(cv);
 
-	}
+  }
 
 }

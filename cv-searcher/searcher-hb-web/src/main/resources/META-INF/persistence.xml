@@ -5,34 +5,22 @@
 	xsi:schemaLocation="http://java.sun.com/xml/ns/persistence 
                       http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd">
 
-	<persistence-unit name="default" transaction-type="JTA"> <!-- transaction-type="RESOURCE_LOCAL">-->
+	<persistence-unit name="default" transaction-type="JTA">
 		<provider>org.hibernate.ejb.HibernatePersistence</provider>
 		<jta-data-source>java:jboss/datasources/MySqlDS</jta-data-source> 
-        <!--<non-jta-data-source>java:jboss/datasources/MySqlDS</non-jta-data-source>-->
 
-	 	<class>br.com.jm.cvsearcher.model.Curriculum</class>
+        <class>br.com.jm.cvsearcher.model.Address</class>
+	 	<class>br.com.jm.cvsearcher.model.Curriculum</class>	 	
 		<exclude-unlisted-classes>false</exclude-unlisted-classes>
 
-
-
 		<properties>
-	<!-- 		<property name="hibernate.archive.autodetection" value="class, hbm"/>		
-		 	<property name="hibernate.connection.url" value="jdbc:mysql://127.0.0.1:3306/drinks" />
-			<property name="hibernate.connection.driver_class" value="com.mysql.jdbc.Driver" />
-			<property name="hibernate.connection.username" value="root" />
-			<property name="hibernate.connection.password" value="root" /> 			
-		-->	
             <property name="hibernate.search.default.directory_provider" value="filesystem"/> 
             <property name="hibernate.search.default.indexBase" value="/Users/virso/tmp/cv-searcher"/>
             		
 		    <property name="hibernate.show_sql" value="true"/>
 			<property name="hibernate.format_sql" value="true"/>
-			<!-- <property name="hibernate.dialect" value="org.hibernatespatial.mysql.MySQLSpatialDialect" /> -->
 			<property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/>
-
-			<!--  <property name="hibernate.listeners.envers.autoRegister" value="false"/> -->	
 			<property name="hibernate.hbm2ddl.auto" value="update"/> 
-            <!-- <property name="jboss.as.jpa.providerModule" value="hibernate3-bundled" /> -->			
-		</properties>
+		</properties>		
 	</persistence-unit>
 </persistence>

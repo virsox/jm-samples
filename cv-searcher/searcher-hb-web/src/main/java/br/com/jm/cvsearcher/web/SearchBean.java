@@ -75,7 +75,7 @@ public class SearchBean implements Serializable {
     // Verifica o tipo de busca a ser feito
     switch (type) {
       case NAME: {
-        // Caso seja por nome, chama o método respectivo do seriço de busca
+        // Caso seja por nome, chama o método respectivo do serviço de busca
         try {
           results = service.findCVByName(keyword);
         }
@@ -86,7 +86,7 @@ public class SearchBean implements Serializable {
         break;
       }
       case CONTENT: {
-        // Caso seja por conteúdo, chama o método respectivo do seriço de busca
+        // Caso seja por conteúdo, chama o método respectivo do serviço de busca
         try {
           results = service.findCVByContent(keyword);
         }
