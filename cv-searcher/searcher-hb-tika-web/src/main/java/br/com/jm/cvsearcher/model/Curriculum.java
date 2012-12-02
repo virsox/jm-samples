@@ -143,7 +143,9 @@ public class Curriculum {
    */
   @Column(length = 100000)
   @Lob
-  @Field(index = Index.YES, analyze = Analyze.YES, store = Store.NO, bridge = @FieldBridge(impl = TikaBridge.class, params = @Parameter(name = "type", value = "DOC")))
+  @Field(index = Index.YES, analyze = Analyze.YES, store = Store.NO,
+         bridge = @FieldBridge(impl = TikaBridge.class,
+                  params = @Parameter(name = "type", value = "DOC")))
   public byte[] getContent() {
     return content;
   }

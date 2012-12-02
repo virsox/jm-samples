@@ -60,7 +60,7 @@ public class SearchServiceBean implements SearchService, Serializable {
         .matching(name)
         .createQuery();
 
-    // encapsula a query Lucene query em um javax.persistence.Query
+    // encapsula a query Lucene em um javax.persistence.Query
     javax.persistence.Query persistenceQuery = fullTextEntityManager
         .createFullTextQuery(query, Curriculum.class);
 
@@ -97,7 +97,7 @@ public class SearchServiceBean implements SearchService, Serializable {
         .matching(content)
         .createQuery();
 
-    // encapsula a query Lucene query em um javax.persistence.Query
+    // encapsula a query Lucene em um javax.persistence.Query
     javax.persistence.Query persistenceQuery = fullTextEntityManager
         .createFullTextQuery(query, Curriculum.class);
 
