@@ -15,7 +15,6 @@ import org.hibernate.search.query.dsl.QueryBuilder;
 import br.com.jm.cvsearcher.model.Curriculum;
 import br.com.jm.cvsearcher.service.CurriculumException;
 import br.com.jm.cvsearcher.service.SearchService;
-import br.com.jm.cvsearcher.util.Constants;
 
 /**
  * Implementação EJB da interface {@link SearchService}.
@@ -82,7 +81,7 @@ public class SearchServiceBean implements SearchService, Serializable
       .matching(value)
       .createQuery();
 
-    // encapsula a query Lucene query em um javax.persistence.Query
+    // encapsula a query Lucene em um javax.persistence.Query
     javax.persistence.Query persistenceQuery = 
         fullTextEntityManager.createFullTextQuery(query, Curriculum.class);
 
