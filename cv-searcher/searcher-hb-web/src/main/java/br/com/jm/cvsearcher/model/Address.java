@@ -1,4 +1,4 @@
-package br.com.jm.cvsearcher.model;
+  package br.com.jm.cvsearcher.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -70,6 +70,7 @@ public class Address {
    * @return the number.
    */
   @Column
+  @Field
   @NumericField
   public Integer getNumber() {
     return number;

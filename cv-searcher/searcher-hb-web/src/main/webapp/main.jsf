@@ -1,0 +1,3 @@
+<!-- Workaround 
+    See: http://stackoverflow.com/questions/4616493/how-to-set-jsf2-welcome-file-with-faces-servlet-mapping
+-->
